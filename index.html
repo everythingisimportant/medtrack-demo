@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedTrack Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="overview">
+        <div>
+          <p class="eyebrow">Treatment tracker</p>
+          <h1>MedTrack</h1>
+          <p class="subcopy">Manage medication, daily doses, and treatment progress from one focused dashboard.</p>
+        </div>
+        <div class="today-card">
+          <span>Today</span>
+          <strong id="todayProgress">0%</strong>
+          <div class="progress-track" aria-label="Today's progress">
+            <div id="todayProgressBar" class="progress-fill"></div>
+          </div>
+          <small id="todaySummary">No doses scheduled.</small>
+        </div>
+      </section>
+
+      <section class="stats-row" aria-label="Medication summary">
+        <article>
+          <span>Active meds</span>
+          <strong id="activeMeds">0</strong>
+        </article>
+        <article>
+          <span>Daily doses</span>
+          <strong id="dailyDoses">0</strong>
+        </article>
+        <article>
+          <span>Completed today</span>
+          <strong id="completedDoses">0</strong>
+        </article>
+        <article>
+          <span>Storage</span>
+          <strong>Private browser</strong>
+        </article>
+      </section>
+
+      <section class="grid">
+        <form id="medicineForm" class="panel form-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Medication</p>
+              <h2>Add medication</h2>
+            </div>
+            <button type="submit" class="primary">Add</button>
+          </div>
+
+          <label>
+            Medication name
+            <input id="medicineName" name="name" placeholder="Example: Amoxicillin" required />
+          </label>
+
+          <div class="two-col">
+            <label>
+              Dosage
+              <input id="medicineDose" name="dose" placeholder="500mg" required />
+            </label>
+            <label>
+              Duration
+              <input id="medicineDays" name="days" type="number" min="1" max="365" value="7" required />
+            </label>
+          </div>
+
+          <label>
+            Dose times
+            <input id="medicineTimes" name="times" placeholder="08:00, 20:00" required />
+          </label>
+
+          <label>
+            Notes
+            <textarea id="medicineNote" name="note" rows="3" placeholder="After meals, avoid dairy..."></textarea>
+          </label>
+        </form>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Schedule</p>
+              <h2>Today's doses</h2>
+            </div>
+            <button id="resetToday" class="ghost" type="button">Reset today</button>
+          </div>
+          <div id="scheduleList" class="schedule-list"></div>
+        </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Progress</p>
+            <h2>Medication list</h2>
+          </div>
+          <button id="seedDemo" class="ghost" type="button">Load demo</button>
+        </div>
+        <div id="medicineList" class="medicine-list"></div>
+      </section>
+
+      <section class="panel data-panel">
+        <div>
+          <p class="eyebrow">Data</p>
+          <h2>Storage and backup</h2>
+          <p>
+            This public demo stores data only in this browser with localStorage. It does not sync between people or devices,
+            and no medication data is sent to a server.
+          </p>
+        </div>
+        <div class="data-actions">
+          <button id="exportData" class="ghost" type="button">Export JSON</button>
+          <button id="importData" class="ghost" type="button">Import JSON</button>
+          <button id="clearData" class="danger" type="button">Clear data</button>
+          <input id="importFile" type="file" accept="application/json" hidden />
+        </div>
+      </section>
+
+      <footer class="footer-note">
+        Demo only. Medication decisions should be checked with a qualified clinician.
+      </footer>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
