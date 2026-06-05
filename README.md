@@ -1,6 +1,6 @@
 # MedTrack Demo
 
-A static medication tracking demo for managing medicines, daily dose checkoffs, and treatment progress.
+A Supabase-backed medication tracking demo for managing medicines, daily dose checkoffs, shared public viewing, and editor access.
 
 ## Features
 
@@ -10,23 +10,28 @@ A static medication tracking demo for managing medicines, daily dose checkoffs, 
 - View per-medication treatment progress
 - Delete medication
 - Reset today's checkoffs
-- Export, import, and clear local JSON data
+- Export synced JSON backup
+- Sign in with Supabase Auth
+- Public read-only care space
+- Request and approve editor access
 
 ## Data Storage
 
-This demo is intentionally static for GitHub Pages. Data is stored only in each visitor's browser with `localStorage`.
+The app is still static for GitHub Pages, but data now syncs through Supabase:
 
-- No backend database
-- No account system
-- No sync between Solar and Nguyet
-- No medication data is sent to a server
+- Supabase Auth handles accounts
+- Postgres stores care spaces, medicines, dose logs, members, and access requests
+- Row Level Security controls public reads and editor/admin writes
+- The frontend only contains the public Supabase URL and publishable key
 
-For a production version, the next step would be a backend database with authentication, reminder delivery, audit history, and clear medical/privacy disclaimers.
+For a production version, the next steps would be reminder delivery, audit history, invite links, and stricter medical/privacy review.
 
 ## Run Locally
 
-Open `index.html` directly in a browser.
+Serve the folder so browser module/CDN behavior matches GitHub Pages.
 
 ```powershell
-start .\index.html
+python -m http.server 4173
 ```
+
+Then open `http://127.0.0.1:4173/`.

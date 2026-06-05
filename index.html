@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedTrack Demo</title>
     <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
     <main class="app-shell">
@@ -39,8 +40,23 @@
         </article>
         <article>
           <span>Storage</span>
-          <strong>Private browser</strong>
+          <strong id="storageMode">Supabase sync</strong>
         </article>
+      </section>
+
+      <section class="panel auth-panel">
+        <div>
+          <p class="eyebrow">Access</p>
+          <h2 id="spaceName">Loading shared care space</h2>
+          <p id="authStatus">Checking Supabase session...</p>
+        </div>
+        <form id="authForm" class="auth-form">
+          <input id="emailInput" name="email" type="email" placeholder="Email" autocomplete="email" />
+          <input id="passwordInput" name="password" type="password" placeholder="Password" autocomplete="current-password" />
+          <button id="signInButton" class="primary" type="submit">Sign in</button>
+          <button id="signUpButton" class="ghost" type="button">Sign up</button>
+          <button id="signOutButton" class="ghost" type="button" hidden>Sign out</button>
+        </form>
       </section>
 
       <section class="grid">
@@ -50,7 +66,7 @@
               <p class="eyebrow">Medication</p>
               <h2>Add medication</h2>
             </div>
-            <button type="submit" class="primary">Add</button>
+            <button id="addMedicineButton" type="submit" class="primary">Add</button>
           </div>
 
           <label>
@@ -94,11 +110,11 @@
 
       <section class="panel">
         <div class="panel-header">
-          <div>
-            <p class="eyebrow">Progress</p>
-            <h2>Medication list</h2>
-          </div>
-          <button id="seedDemo" class="ghost" type="button">Load demo</button>
+            <div>
+              <p class="eyebrow">Progress</p>
+              <h2>Medication list</h2>
+            </div>
+          <button id="requestAccess" class="ghost" type="button" hidden>Request edit access</button>
         </div>
         <div id="medicineList" class="medicine-list"></div>
       </section>
@@ -106,18 +122,26 @@
       <section class="panel data-panel">
         <div>
           <p class="eyebrow">Data</p>
-          <h2>Storage and backup</h2>
+          <h2>Sharing and backup</h2>
           <p>
-            This public demo stores data only in this browser with localStorage. It does not sync between people or devices,
-            and no medication data is sent to a server.
+            Data syncs through Supabase with row-level security. Public visitors can view this care space. Signed-in editors
+            can add medicines and confirm doses.
           </p>
         </div>
         <div class="data-actions">
+          <button id="refreshData" class="ghost" type="button">Refresh</button>
           <button id="exportData" class="ghost" type="button">Export JSON</button>
-          <button id="importData" class="ghost" type="button">Import JSON</button>
-          <button id="clearData" class="danger" type="button">Clear data</button>
-          <input id="importFile" type="file" accept="application/json" hidden />
         </div>
+      </section>
+
+      <section id="requestsPanel" class="panel" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">ACL</p>
+            <h2>Access requests</h2>
+          </div>
+        </div>
+        <div id="requestsList" class="medicine-list"></div>
       </section>
 
       <footer class="footer-note">
