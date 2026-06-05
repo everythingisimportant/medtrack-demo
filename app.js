@@ -316,8 +316,23 @@ function render() {
 
 function renderShell() {
   const signedIn = Boolean(session);
+  if (!careSpace) {
+    spaceName.textContent = "No shared care space yet";
+    authStatus.textContent = signedIn ? "Creating shared care space..." : "Sign in to create Solar + Nguyet Care Space.";
+    signOutButton.hidden = !signedIn;
+    emailInput.hidden = signedIn;
+    passwordInput.hidden = signedIn;
+    document.querySelector("#signInButton").hidden = signedIn;
+    signUpButton.hidden = signedIn;
+    requestAccess.hidden = true;
+    addMedicineButton.disabled = true;
+    resetToday.disabled = true;
+    storageMode.textContent = "Read-only sync";
+    return;
+  }
+
   const access = role || (careSpace?.public_read ? "public viewer" : "none");
-  spaceName.textContent = careSpace?.name || "No shared care space yet";
+  spaceName.textContent = careSpace.name;
   authStatus.textContent = signedIn
     ? `${session.user.email} - ${access}`
     : `${access}. Sign in to request edit access.`;
