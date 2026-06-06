@@ -16,6 +16,7 @@ let medicines = [];
 let doseLogs = [];
 let requests = [];
 let channel = null;
+let editingMedicineId = null;
 
 const form = document.querySelector("#medicineForm");
 const scheduleList = document.querySelector("#scheduleList");
@@ -23,6 +24,9 @@ const medicineList = document.querySelector("#medicineList");
 const todayProgress = document.querySelector("#todayProgress");
 const todayProgressBar = document.querySelector("#todayProgressBar");
 const todaySummary = document.querySelector("#todaySummary");
+const overallProgress = document.querySelector("#overallProgress");
+const overallProgressBar = document.querySelector("#overallProgressBar");
+const overallSummary = document.querySelector("#overallSummary");
 const activeMeds = document.querySelector("#activeMeds");
 const dailyDoses = document.querySelector("#dailyDoses");
 const completedDoses = document.querySelector("#completedDoses");
@@ -40,6 +44,13 @@ const passwordInput = document.querySelector("#passwordInput");
 const signUpButton = document.querySelector("#signUpButton");
 const signOutButton = document.querySelector("#signOutButton");
 const addMedicineButton = document.querySelector("#addMedicineButton");
+const cancelEditButton = document.querySelector("#cancelEditButton");
+const medicineFormTitle = document.querySelector("#medicineFormTitle");
+const medicineName = document.querySelector("#medicineName");
+const medicineDose = document.querySelector("#medicineDose");
+const medicineDays = document.querySelector("#medicineDays");
+const medicineTimes = document.querySelector("#medicineTimes");
+const medicineNote = document.querySelector("#medicineNote");
 const storageMode = document.querySelector("#storageMode");
 
 init();
@@ -67,6 +78,7 @@ function bindEvents() {
   signOutButton.addEventListener("click", () => client.auth.signOut());
   refreshData.addEventListener("click", loadApp);
   requestAccess.addEventListener("click", createAccessRequest);
+  cancelEditButton.addEventListener("click", resetMedicineForm);
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -76,19 +88,24 @@ function bindEvents() {
     const times = parseTimes(data.get("times"));
     if (!times.length) return alert("Enter times in 24-hour format, for example 08:00, 20:00.");
 
-    const { error } = await client.from("medicines").insert({
-      space_id: careSpace.id,
+    const payload = {
       name: data.get("name").trim(),
       dose: data.get("dose").trim(),
       days: Number(data.get("days")),
       times,
-      note: data.get("note").trim(),
-      created_by: session.user.id
-    });
+      note: data.get("note").trim()
+    };
 
-    if (error) return alert(error.message);
-    form.reset();
-    document.querySelector("#medicineDays").value = 7;
+    const result = editingMedicineId
+      ? await client.from("medicines").update(payload).eq("id", editingMedicineId)
+      : await client.from("medicines").insert({
+          ...payload,
+          space_id: careSpace.id,
+          created_by: session.user.id
+        });
+
+    if (result.error) return alert(result.error.message);
+    resetMedicineForm();
     await loadData();
   });
 
@@ -272,6 +289,12 @@ async function handleActionClick(event) {
     if (error) return alert(error.message);
   }
 
+  if (action === "edit-medicine") {
+    if (!canEdit()) return alert("Sign in with editor access before editing medication.");
+    startMedicineEdit(id);
+    return;
+  }
+
   if (action === "approve-request") {
     if (!canAdmin()) return;
     const request = requests.find((item) => item.id === id);
@@ -317,6 +340,7 @@ async function createAccessRequest() {
 function render() {
   renderShell();
   renderToday();
+  renderOverallProgress();
   renderMedicines();
   renderRequests();
 }
@@ -333,6 +357,7 @@ function renderShell() {
     signUpButton.hidden = signedIn;
     requestAccess.hidden = true;
     addMedicineButton.disabled = true;
+    resetMedicineForm();
     resetToday.disabled = true;
     storageMode.textContent = "Read-only sync";
     return;
@@ -350,6 +375,7 @@ function renderShell() {
   signUpButton.hidden = signedIn;
   requestAccess.hidden = !signedIn || !careSpace || Boolean(role);
   addMedicineButton.disabled = !canEdit();
+  if (!canEdit()) resetMedicineForm();
   resetToday.disabled = !canEdit();
   storageMode.textContent = canEdit() ? "Editable sync" : "Read-only sync";
 }
@@ -396,6 +422,16 @@ function renderToday() {
     : `<div class="empty">No medication scheduled yet.</div>`;
 }
 
+function renderOverallProgress() {
+  const progress = getOverallTreatmentProgress();
+
+  overallProgress.textContent = `${progress.percent}%`;
+  overallProgressBar.style.width = `${progress.percent}%`;
+  overallSummary.textContent = progress.totalDays
+    ? `Day ${progress.elapsedDays} of ${progress.totalDays}. ${progress.daysLeft} days left.`
+    : "No active treatment.";
+}
+
 function renderMedicines() {
   medicineList.innerHTML = medicines.length
     ? medicines
@@ -413,6 +449,7 @@ function renderMedicines() {
                 </div>
               </div>
               <div class="medicine-actions">
+                <button class="ghost" data-action="edit-medicine" data-id="${medicine.id}" ${canEdit() ? "" : "disabled"}>Edit</button>
                 <button class="danger" data-action="delete-medicine" data-id="${medicine.id}" ${canEdit() ? "" : "disabled"}>Delete</button>
               </div>
             </article>
@@ -462,8 +499,56 @@ function getTreatmentProgress(medicine) {
   return { elapsed, percent: Math.round((elapsed / medicine.days) * 100) };
 }
 
+function getOverallTreatmentProgress() {
+  if (!medicines.length) {
+    return { elapsedDays: 0, totalDays: 0, daysLeft: 0, percent: 0 };
+  }
+
+  const starts = medicines.map((medicine) => startOfDay(new Date(medicine.created_at)));
+  const ends = medicines.map((medicine, index) => addDays(starts[index], Math.max(1, Number(medicine.days))));
+  const start = new Date(Math.min(...starts.map((date) => date.getTime())));
+  const end = new Date(Math.max(...ends.map((date) => date.getTime())));
+  const now = startOfDay(new Date());
+  const totalDays = Math.max(1, Math.round((end - start) / 86400000));
+  const elapsedDays = Math.min(totalDays, Math.max(1, Math.floor((now - start) / 86400000) + 1));
+  const daysLeft = Math.max(0, totalDays - elapsedDays);
+
+  return {
+    elapsedDays,
+    totalDays,
+    daysLeft,
+    percent: Math.round((elapsedDays / totalDays) * 100)
+  };
+}
+
 function getTakenCount(medicineId) {
   return doseLogs.filter((log) => log.medicine_id === medicineId).length;
+}
+
+function startMedicineEdit(id) {
+  const medicine = medicines.find((item) => item.id === id);
+  if (!medicine) return;
+
+  editingMedicineId = id;
+  medicineName.value = medicine.name;
+  medicineDose.value = medicine.dose;
+  medicineDays.value = medicine.days;
+  medicineTimes.value = medicine.times.join(", ");
+  medicineNote.value = medicine.note || "";
+  medicineFormTitle.textContent = "Edit medication";
+  addMedicineButton.textContent = "Save";
+  cancelEditButton.hidden = false;
+  form.scrollIntoView({ behavior: "smooth", block: "start" });
+  medicineName.focus();
+}
+
+function resetMedicineForm() {
+  editingMedicineId = null;
+  form.reset();
+  medicineDays.value = 7;
+  medicineFormTitle.textContent = "Add medication";
+  addMedicineButton.textContent = "Add";
+  cancelEditButton.hidden = true;
 }
 
 function canEdit() {
@@ -498,6 +583,12 @@ function getAuthRedirectUrl() {
 
 function startOfDay(date) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function addDays(date, days) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
 }
 
 function escapeHtml(value) {

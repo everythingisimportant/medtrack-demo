@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedTrack Demo</title>
-    <link rel="stylesheet" href="./styles.css?v=6d2fb71" />
+    <link rel="stylesheet" href="./styles.css?v=treatment-edit-20260606" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
@@ -15,13 +15,23 @@
           <h1>MedTrack</h1>
           <p class="subcopy">Manage medication, daily doses, and treatment progress from one focused dashboard.</p>
         </div>
-        <div class="today-card">
-          <span>Today</span>
-          <strong id="todayProgress">0%</strong>
-          <div class="progress-track" aria-label="Today's progress">
-            <div id="todayProgressBar" class="progress-fill"></div>
+        <div class="overview-cards">
+          <div class="today-card">
+            <span>Today</span>
+            <strong id="todayProgress">0%</strong>
+            <div class="progress-track" aria-label="Today's progress">
+              <div id="todayProgressBar" class="progress-fill"></div>
+            </div>
+            <small id="todaySummary">No doses scheduled.</small>
           </div>
-          <small id="todaySummary">No doses scheduled.</small>
+          <div class="today-card">
+            <span>Treatment</span>
+            <strong id="overallProgress">0%</strong>
+            <div class="progress-track" aria-label="Overall treatment progress">
+              <div id="overallProgressBar" class="progress-fill"></div>
+            </div>
+            <small id="overallSummary">No active treatment.</small>
+          </div>
         </div>
       </section>
 
@@ -64,9 +74,12 @@
           <div class="panel-header">
             <div>
               <p class="eyebrow">Medication</p>
-              <h2>Add medication</h2>
+              <h2 id="medicineFormTitle">Add medication</h2>
             </div>
-            <button id="addMedicineButton" type="submit" class="primary">Add</button>
+            <div class="form-actions">
+              <button id="cancelEditButton" type="button" class="ghost" hidden>Cancel</button>
+              <button id="addMedicineButton" type="submit" class="primary">Add</button>
+            </div>
           </div>
 
           <label>
@@ -149,6 +162,6 @@
       </footer>
     </main>
 
-    <script src="./app.js?v=auth-redirect-20260606"></script>
+    <script src="./app.js?v=treatment-edit-20260606"></script>
   </body>
 </html>
