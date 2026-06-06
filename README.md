@@ -23,6 +23,17 @@ The app is still static for GitHub Pages, but data now syncs through Supabase:
 - Postgres stores care spaces, medicines, dose logs, members, and access requests
 - Row Level Security controls public reads and editor/admin writes
 - The frontend only contains the public Supabase URL and publishable key
+- Signup confirmation emails redirect back to `https://everythingisimportant.github.io/medtrack-demo/`, even when signup is tested from localhost.
+
+## Supabase Auth URL Configuration
+
+In Supabase Auth settings, keep the public app URL allowlisted so confirmation emails can return to the deployed app:
+
+```text
+https://everythingisimportant.github.io/medtrack-demo/
+```
+
+If that URL is not in the Auth redirect allowlist, Supabase may reject the signup redirect or fall back to the project Site URL.
 
 For a production version, the next steps would be reminder delivery, audit history, invite links, and stricter medical/privacy review.
 

@@ -1,5 +1,6 @@
 const SUPABASE_URL = "https://efvjlnmaysnjyrslowns.supabase.co";
 const SUPABASE_KEY = "sb_publishable_2-oT4-LmeP67RspMsh9oFw_oMcmKm2I";
+const PUBLIC_APP_URL = "https://everythingisimportant.github.io/medtrack-demo/";
 
 const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -124,7 +125,13 @@ async function signUp() {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
   if (!email || !password) return alert("Enter email and password.");
-  const { error } = await client.auth.signUp({ email, password });
+  const { error } = await client.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: getAuthRedirectUrl()
+    }
+  });
   if (error) return alert(error.message);
   alert("Account created. Check email if Supabase asks for confirmation, then sign in.");
 }
@@ -473,6 +480,20 @@ function getTodayKey() {
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function getAuthRedirectUrl() {
+  const current = new URL(window.location.href);
+  const localHosts = new Set(["localhost", "127.0.0.1", "0.0.0.0", ""]);
+
+  if (localHosts.has(current.hostname)) return PUBLIC_APP_URL;
+
+  current.search = "";
+  current.hash = "";
+  if (current.pathname.endsWith("/index.html")) {
+    current.pathname = current.pathname.slice(0, -"index.html".length);
+  }
+  return current.toString();
 }
 
 function startOfDay(date) {
