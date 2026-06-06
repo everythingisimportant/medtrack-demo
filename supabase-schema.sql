@@ -42,12 +42,26 @@ create table if not exists public.medicines (
   space_id uuid not null references public.care_spaces(id) on delete cascade,
   name text not null,
   dose text not null,
+  start_date date not null default current_date,
   days integer not null check (days between 1 and 365),
   times text[] not null,
   note text,
   created_by uuid references auth.users(id) on delete set null,
   created_at timestamptz not null default now()
 );
+
+alter table public.medicines
+add column if not exists start_date date;
+
+update public.medicines
+set start_date = created_at::date
+where start_date is null;
+
+alter table public.medicines
+alter column start_date set default current_date;
+
+alter table public.medicines
+alter column start_date set not null;
 
 create table if not exists public.dose_logs (
   id uuid primary key default gen_random_uuid(),

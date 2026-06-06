@@ -4,7 +4,8 @@ A Supabase-backed medication tracking demo for managing medicines, daily dose ch
 
 ## Features
 
-- Add medication with dosage, duration, dose times, and notes
+- Add medication with dosage, treatment start date, duration, dose times, and notes
+- Edit each medication's treatment start date so progress can show the right treatment day
 - Mark today's doses as taken
 - View daily adherence progress
 - View per-medication treatment progress

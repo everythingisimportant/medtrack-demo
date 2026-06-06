@@ -5,8 +5,8 @@ const PUBLIC_APP_URL = "https://everythingisimportant.github.io/medtrack-demo/";
 const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const demoMedicines = [
-  { name: "Amoxicillin", dose: "500mg", days: 7, times: ["08:00", "20:00"], note: "Take after meals." },
-  { name: "Vitamin D3", dose: "1000 IU", days: 30, times: ["12:30"], note: "Take with lunch." }
+  { name: "Amoxicillin", dose: "500mg", start_date: getTodayKey(), days: 7, times: ["08:00", "20:00"], note: "Take after meals." },
+  { name: "Vitamin D3", dose: "1000 IU", start_date: getTodayKey(), days: 30, times: ["12:30"], note: "Take with lunch." }
 ];
 
 let session = null;
@@ -49,6 +49,7 @@ const medicineFormTitle = document.querySelector("#medicineFormTitle");
 const medicineName = document.querySelector("#medicineName");
 const medicineDose = document.querySelector("#medicineDose");
 const medicineDays = document.querySelector("#medicineDays");
+const medicineStartDate = document.querySelector("#medicineStartDate");
 const medicineTimes = document.querySelector("#medicineTimes");
 const medicineNote = document.querySelector("#medicineNote");
 const storageMode = document.querySelector("#storageMode");
@@ -59,6 +60,7 @@ async function init() {
   const result = await client.auth.getSession();
   session = result.data.session;
   bindEvents();
+  resetMedicineForm();
   await loadApp();
 
   client.auth.onAuthStateChange(async (_event, nextSession) => {
@@ -91,6 +93,7 @@ function bindEvents() {
     const payload = {
       name: data.get("name").trim(),
       dose: data.get("dose").trim(),
+      start_date: data.get("start_date"),
       days: Number(data.get("days")),
       times,
       note: data.get("note").trim()
@@ -383,6 +386,7 @@ function renderShell() {
 function renderToday() {
   const today = getTodayKey();
   const doses = medicines
+    .filter((medicine) => isMedicineActiveOn(medicine, today))
     .flatMap((medicine) =>
       medicine.times.map((time) => ({
         medicine,
@@ -441,7 +445,7 @@ function renderMedicines() {
             <article class="medicine-card">
               <div>
                 <p class="medicine-title">${escapeHtml(medicine.name)}</p>
-                <p class="medicine-meta">${escapeHtml(medicine.dose)} - ${medicine.times.join(", ")} - ${medicine.days} days</p>
+                <p class="medicine-meta">${escapeHtml(medicine.dose)} - ${medicine.times.join(", ")} - starts ${getMedicineStartKey(medicine)} - ${medicine.days} days</p>
                 <p class="medicine-meta">${progress.elapsed}/${medicine.days} treatment days, ${progress.percent}% complete</p>
                 <p class="medicine-meta">${getTakenCount(medicine.id)} total confirmed doses</p>
                 <div class="medicine-progress" aria-label="Treatment progress">
@@ -493,7 +497,7 @@ function parseTimes(value) {
 }
 
 function getTreatmentProgress(medicine) {
-  const start = startOfDay(new Date(medicine.created_at));
+  const start = getMedicineStartDate(medicine);
   const now = startOfDay(new Date());
   const elapsed = Math.min(medicine.days, Math.max(1, Math.floor((now - start) / 86400000) + 1));
   return { elapsed, percent: Math.round((elapsed / medicine.days) * 100) };
@@ -504,7 +508,7 @@ function getOverallTreatmentProgress() {
     return { elapsedDays: 0, totalDays: 0, daysLeft: 0, percent: 0 };
   }
 
-  const starts = medicines.map((medicine) => startOfDay(new Date(medicine.created_at)));
+  const starts = medicines.map(getMedicineStartDate);
   const ends = medicines.map((medicine, index) => addDays(starts[index], Math.max(1, Number(medicine.days))));
   const start = new Date(Math.min(...starts.map((date) => date.getTime())));
   const end = new Date(Math.max(...ends.map((date) => date.getTime())));
@@ -525,6 +529,21 @@ function getTakenCount(medicineId) {
   return doseLogs.filter((log) => log.medicine_id === medicineId).length;
 }
 
+function getMedicineStartDate(medicine) {
+  return startOfDay(new Date(getMedicineStartKey(medicine)));
+}
+
+function getMedicineStartKey(medicine) {
+  return medicine.start_date || medicine.created_at?.slice(0, 10) || getTodayKey();
+}
+
+function isMedicineActiveOn(medicine, dateKey) {
+  const target = startOfDay(new Date(dateKey));
+  const start = getMedicineStartDate(medicine);
+  const end = addDays(start, Math.max(1, Number(medicine.days)));
+  return target >= start && target < end;
+}
+
 function startMedicineEdit(id) {
   const medicine = medicines.find((item) => item.id === id);
   if (!medicine) return;
@@ -533,6 +552,7 @@ function startMedicineEdit(id) {
   medicineName.value = medicine.name;
   medicineDose.value = medicine.dose;
   medicineDays.value = medicine.days;
+  medicineStartDate.value = getMedicineStartKey(medicine);
   medicineTimes.value = medicine.times.join(", ");
   medicineNote.value = medicine.note || "";
   medicineFormTitle.textContent = "Edit medication";
@@ -546,6 +566,7 @@ function resetMedicineForm() {
   editingMedicineId = null;
   form.reset();
   medicineDays.value = 7;
+  medicineStartDate.value = getTodayKey();
   medicineFormTitle.textContent = "Add medication";
   addMedicineButton.textContent = "Add";
   cancelEditButton.hidden = true;
