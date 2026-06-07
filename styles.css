@@ -500,9 +500,7 @@ textarea:focus {
   justify-content: center;
   min-width: 64px;
   min-height: 36px;
-  border-radius: 999px;
   color: var(--accent);
-  background: var(--soft-strong);
   font-weight: 900;
 }
 
@@ -513,7 +511,6 @@ textarea:focus {
 
 .dose-row.done .time-chip {
   color: #0c3325;
-  background: color-mix(in srgb, var(--accent) 28%, #ffffff);
 }
 
 .dose-row.done .ghost {
@@ -526,10 +523,13 @@ textarea:focus {
   background: #1d2c24;
 }
 
-:root[data-theme="dark"] .dose-row.done .time-chip,
 :root[data-theme="dark"] .dose-row.done .ghost {
   color: #dff4e6;
   background: #315844;
+}
+
+:root[data-theme="dark"] .dose-row.done .time-chip {
+  color: #a8dbc0;
 }
 
 :root[data-theme="dark"] .dose-row.done .ghost {
