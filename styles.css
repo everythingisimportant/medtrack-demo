@@ -112,44 +112,62 @@ button:disabled {
   margin-bottom: 22px;
 }
 
-.control-select {
-  display: grid;
-  gap: 5px;
-  min-width: 132px;
-}
-
-.control-select label {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.66rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.control-select select {
-  min-height: 38px;
+.icon-control,
+.icon-select {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 40px;
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 8px;
-  padding: 0 34px 0 12px;
   color: #123328;
-  background-color: rgba(255, 255, 255, 0.94);
-  background-image:
-    linear-gradient(45deg, transparent 50%, currentColor 50%),
-    linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position:
-    calc(100% - 16px) 16px,
-    calc(100% - 11px) 16px;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-  appearance: none;
-  -webkit-appearance: none;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-  font-size: 0.84rem;
   font-weight: 900;
 }
 
-.control-select select:focus {
+.icon-control {
+  background: rgba(255, 255, 255, 0.94);
+  font-size: 1.02rem;
+}
+
+.icon-select {
+  background: rgba(255, 255, 255, 0.94);
+  font-size: 0.96rem;
+}
+
+.icon-select::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  bottom: 7px;
+  border-top: 4px solid currentColor;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  pointer-events: none;
+}
+
+.icon-select select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  color: transparent;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.icon-select select option {
+  color: var(--ink);
+  background: var(--panel);
+}
+
+.icon-control:focus,
+.icon-select:focus-within {
   outline: 0;
   border-color: rgba(255, 255, 255, 0.68);
   box-shadow: 0 0 0 3px rgba(228, 165, 45, 0.26);
@@ -351,20 +369,10 @@ textarea::placeholder {
   color: color-mix(in srgb, var(--muted) 84%, transparent);
 }
 
-.control-select select {
-  color: #123328;
-  background-color: rgba(255, 255, 255, 0.94);
-  background-image:
-    linear-gradient(45deg, transparent 50%, currentColor 50%),
-    linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position:
-    calc(100% - 16px) 16px,
-    calc(100% - 11px) 16px;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-}
-
-:root[data-theme="dark"] .control-select select {
+.icon-control,
+.icon-select,
+:root[data-theme="dark"] .icon-control,
+:root[data-theme="dark"] .icon-select {
   color: #0f1512;
   background-color: var(--accent-2);
 }
@@ -394,6 +402,10 @@ textarea:focus {
 .primary {
   color: #fff;
   background: var(--accent);
+}
+
+:root[data-theme="dark"] .primary {
+  color: #07110c;
 }
 
 .ghost {
@@ -450,8 +462,28 @@ textarea:focus {
 }
 
 .dose-row.done {
-  border-color: rgba(31, 122, 90, 0.34);
-  background: color-mix(in srgb, var(--accent) 9%, var(--card));
+  border-color: color-mix(in srgb, var(--accent) 58%, var(--line));
+  background: color-mix(in srgb, var(--accent) 14%, var(--card));
+}
+
+.dose-row.done .time-chip {
+  color: #0c3325;
+  background: color-mix(in srgb, var(--accent) 28%, #ffffff);
+}
+
+.dose-row.done .ghost {
+  color: #0c3325;
+  background: color-mix(in srgb, var(--accent) 30%, #ffffff);
+}
+
+:root[data-theme="dark"] .dose-row.done {
+  background: #263b31;
+}
+
+:root[data-theme="dark"] .dose-row.done .time-chip,
+:root[data-theme="dark"] .dose-row.done .ghost {
+  color: #06100b;
+  background: #86d9ad;
 }
 
 .dose-title,

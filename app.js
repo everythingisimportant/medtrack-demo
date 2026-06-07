@@ -4,7 +4,7 @@ const PUBLIC_APP_URL = "https://everythingisimportant.github.io/medtrack-demo/";
 const THEME_KEY = "medtrack-theme";
 const LANGUAGE_KEY = "medtrack-language";
 const PREF_VERSION_KEY = "medtrack-pref-version";
-const PREF_VERSION = "dropdown-default-20260607";
+const PREF_VERSION = "icon-controls-default-20260607";
 
 const translations = {
   en: {
@@ -12,6 +12,8 @@ const translations = {
     themeLabel: "Theme",
     lightMode: "Light",
     darkMode: "Dark",
+    switchToDark: "Switch to dark mode",
+    switchToLight: "Switch to light mode",
     languageLabel: "Language",
     englishLanguage: "English",
     vietnameseLanguage: "Vietnamese",
@@ -107,6 +109,8 @@ const translations = {
     themeLabel: "Giao diện",
     lightMode: "Sáng",
     darkMode: "Tối",
+    switchToDark: "Chuyển sang chế độ tối",
+    switchToLight: "Chuyển sang chế độ sáng",
     languageLabel: "Ngôn ngữ",
     englishLanguage: "English",
     vietnameseLanguage: "Tiếng Việt",
@@ -252,7 +256,8 @@ const medicineStartDate = document.querySelector("#medicineStartDate");
 const medicineTimes = document.querySelector("#medicineTimes");
 const medicineNote = document.querySelector("#medicineNote");
 const storageMode = document.querySelector("#storageMode");
-const themeSelect = document.querySelector("#themeSelect");
+const themeToggle = document.querySelector("#themeToggle");
+const themeIcon = document.querySelector("#themeIcon");
 const languageSelect = document.querySelector("#languageSelect");
 
 init();
@@ -283,7 +288,7 @@ function bindEvents() {
   refreshData.addEventListener("click", loadApp);
   requestAccess.addEventListener("click", createAccessRequest);
   cancelEditButton.addEventListener("click", resetMedicineForm);
-  themeSelect.addEventListener("change", () => setTheme(themeSelect.value));
+  themeToggle.addEventListener("click", () => setTheme(appTheme === "dark" ? "light" : "dark"));
   languageSelect.addEventListener("change", () => setLanguage(languageSelect.value));
 
   form.addEventListener("submit", async (event) => {
@@ -354,6 +359,7 @@ function setLanguage(language) {
   appLanguage = language === "vi" ? "vi" : "en";
   localStorage.setItem(LANGUAGE_KEY, appLanguage);
   applyStaticTranslations();
+  applyTheme();
   updateMedicineFormText();
   render();
 }
@@ -370,7 +376,8 @@ function applyPreferences() {
 
 function applyTheme() {
   document.documentElement.dataset.theme = appTheme;
-  themeSelect.value = appTheme;
+  themeIcon.textContent = appTheme === "dark" ? "☾" : "☀";
+  themeToggle.setAttribute("aria-label", appTheme === "dark" ? t("switchToLight") : t("switchToDark"));
 }
 
 function applyStaticTranslations() {
@@ -390,6 +397,7 @@ function applyStaticTranslations() {
   });
 
   languageSelect.value = appLanguage;
+  languageSelect.setAttribute("aria-label", t("languageLabel"));
 }
 
 function updateMedicineFormText() {
