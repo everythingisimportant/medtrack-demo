@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedTrack Demo</title>
-    <link rel="stylesheet" href="./styles.css?v=start-date-mobile-20260607" />
+    <link rel="stylesheet" href="./styles.css?v=form-layout-mobile-20260607" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
@@ -76,10 +76,6 @@
               <p class="eyebrow">Medication</p>
               <h2 id="medicineFormTitle">Add medication</h2>
             </div>
-            <div class="form-actions">
-              <button id="cancelEditButton" type="button" class="ghost" hidden>Cancel</button>
-              <button id="addMedicineButton" type="submit" class="primary">Add</button>
-            </div>
           </div>
 
           <label>
@@ -112,6 +108,11 @@
             Notes
             <textarea id="medicineNote" name="note" rows="3" placeholder="After meals, avoid dairy..."></textarea>
           </label>
+
+          <div class="form-actions">
+            <button id="cancelEditButton" type="button" class="ghost" hidden>Cancel</button>
+            <button id="addMedicineButton" type="submit" class="primary">Add</button>
+          </div>
         </form>
 
         <section class="panel">
