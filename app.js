@@ -1,6 +1,197 @@
 const SUPABASE_URL = "https://efvjlnmaysnjyrslowns.supabase.co";
 const SUPABASE_KEY = "sb_publishable_2-oT4-LmeP67RspMsh9oFw_oMcmKm2I";
 const PUBLIC_APP_URL = "https://everythingisimportant.github.io/medtrack-demo/";
+const THEME_KEY = "medtrack-theme";
+const LANGUAGE_KEY = "medtrack-language";
+
+const translations = {
+  en: {
+    pageTitle: "MedTrack Demo",
+    lightMode: "Light",
+    darkMode: "Dark",
+    englishLanguage: "English",
+    vietnameseLanguage: "Vietnamese",
+    heroEyebrow: "Treatment tracker",
+    heroSubcopy: "Manage medication, daily doses, and treatment progress from one focused dashboard.",
+    today: "Today",
+    treatment: "Treatment",
+    todayProgressLabel: "Today's progress",
+    overallProgressLabel: "Overall treatment progress",
+    activeMeds: "Active meds",
+    dailyDoses: "Daily doses",
+    completedToday: "Completed today",
+    storage: "Storage",
+    access: "Access",
+    emailPlaceholder: "Email",
+    passwordPlaceholder: "Password",
+    signIn: "Sign in",
+    signUp: "Sign up",
+    signOut: "Sign out",
+    medication: "Medication",
+    addMedication: "Add medication",
+    editMedication: "Edit medication",
+    medicationName: "Medication name",
+    medicineNamePlaceholder: "Example: Amoxicillin",
+    dosage: "Dosage",
+    dosagePlaceholder: "500mg",
+    duration: "Duration",
+    startDate: "Start date",
+    startDatePlaceholder: "MM/DD/YYYY",
+    doseTimes: "Dose times",
+    doseTimesPlaceholder: "08:00, 20:00",
+    notes: "Notes",
+    notesPlaceholder: "After meals, avoid dairy...",
+    cancel: "Cancel",
+    add: "Add",
+    save: "Save",
+    edit: "Edit",
+    delete: "Delete",
+    schedule: "Schedule",
+    todaysDoses: "Today's doses",
+    resetToday: "Reset today",
+    progress: "Progress",
+    medicationList: "Medication list",
+    requestEditAccess: "Request edit access",
+    data: "Data",
+    sharingBackup: "Sharing and backup",
+    dataDescription: "Data syncs through Supabase with row-level security. Public visitors can view this care space. Signed-in editors can add medicines and confirm doses.",
+    refresh: "Refresh",
+    exportJson: "Export JSON",
+    accessRequests: "Access requests",
+    footerNote: "Demo only. Medication decisions should be checked with a qualified clinician.",
+    noDosesScheduled: "No doses scheduled.",
+    noActiveTreatment: "No active treatment.",
+    dosesConfirmed: "{done}/{total} doses confirmed.",
+    dayOfTreatment: "Day {elapsed} of {total}. {left} days left.",
+    activeTreatment: "{elapsed}/{total} treatment days, {percent}% complete",
+    totalConfirmedDoses: "{count} total confirmed doses",
+    medicineMeta: "{dose} - {times} - starts {start} - {days} days",
+    noMedicationScheduled: "No medication scheduled yet.",
+    noMedicationAdded: "No medication added yet.",
+    noPendingAccessRequests: "No pending access requests.",
+    taken: "Taken",
+    markTaken: "Mark taken",
+    loadingSharedSpace: "Loading shared care space",
+    checkingSession: "Checking Supabase session...",
+    noSharedSpace: "No shared care space yet",
+    signInCreateSpace: "Sign in to create Solar + Nguyet Care Space.",
+    creatingSpace: "Creating shared care space...",
+    publicViewer: "public viewer",
+    none: "none",
+    signInRequestAccess: "{access}. Sign in to request edit access.",
+    signedInStatus: "{email} - {access}",
+    readOnlySync: "Read-only sync",
+    editableSync: "Editable sync",
+    supabaseSync: "Supabase sync",
+    alertEditorMedication: "Sign in with editor access before changing medication.",
+    alertTimes: "Enter times in 24-hour format, for example 08:00, 20:00.",
+    alertStartDate: "Enter the start date as MM/DD/YYYY, for example 06/07/2026.",
+    alertDoseLogs: "Sign in with editor access before changing dose logs.",
+    alertEmailPassword: "Enter email and password.",
+    alertAccountCreated: "Account created. Check email if Supabase asks for confirmation, then sign in.",
+    alertDeleteMedication: "Sign in with editor access before deleting medication.",
+    confirmDeleteMedication: "Delete this medication?",
+    alertEditMedication: "Sign in with editor access before editing medication.",
+    alertSignInFirst: "Sign in first, then request access.",
+    alertAccessRequestSent: "Access request sent.",
+    accessRequested: "Requested {role} access",
+    approve: "Approve",
+    reject: "Reject"
+  },
+  vi: {
+    pageTitle: "MedTrack Demo",
+    lightMode: "Sáng",
+    darkMode: "Tối",
+    englishLanguage: "English",
+    vietnameseLanguage: "Tiếng Việt",
+    heroEyebrow: "Theo dõi điều trị",
+    heroSubcopy: "Quản lý thuốc, liều uống hằng ngày và tiến độ điều trị trong một bảng điều khiển gọn gàng.",
+    today: "Hôm nay",
+    treatment: "Điều trị",
+    todayProgressLabel: "Tiến độ hôm nay",
+    overallProgressLabel: "Tiến độ điều trị tổng thể",
+    activeMeds: "Thuốc đang dùng",
+    dailyDoses: "Liều hôm nay",
+    completedToday: "Đã hoàn thành",
+    storage: "Lưu trữ",
+    access: "Truy cập",
+    emailPlaceholder: "Email",
+    passwordPlaceholder: "Mật khẩu",
+    signIn: "Đăng nhập",
+    signUp: "Đăng ký",
+    signOut: "Đăng xuất",
+    medication: "Thuốc",
+    addMedication: "Thêm thuốc",
+    editMedication: "Sửa thuốc",
+    medicationName: "Tên thuốc",
+    medicineNamePlaceholder: "Ví dụ: Amoxicillin",
+    dosage: "Liều lượng",
+    dosagePlaceholder: "500mg",
+    duration: "Số ngày",
+    startDate: "Ngày bắt đầu",
+    startDatePlaceholder: "MM/DD/YYYY",
+    doseTimes: "Giờ uống",
+    doseTimesPlaceholder: "08:00, 20:00",
+    notes: "Ghi chú",
+    notesPlaceholder: "Sau bữa ăn, tránh sữa...",
+    cancel: "Hủy",
+    add: "Thêm",
+    save: "Lưu",
+    edit: "Sửa",
+    delete: "Xóa",
+    schedule: "Lịch",
+    todaysDoses: "Liều hôm nay",
+    resetToday: "Đặt lại hôm nay",
+    progress: "Tiến độ",
+    medicationList: "Danh sách thuốc",
+    requestEditAccess: "Xin quyền chỉnh sửa",
+    data: "Dữ liệu",
+    sharingBackup: "Chia sẻ và sao lưu",
+    dataDescription: "Dữ liệu đồng bộ qua Supabase với bảo mật theo từng dòng. Người xem công khai có thể xem không gian chăm sóc này. Người đã đăng nhập có quyền chỉnh sửa có thể thêm thuốc và xác nhận liều.",
+    refresh: "Làm mới",
+    exportJson: "Xuất JSON",
+    accessRequests: "Yêu cầu truy cập",
+    footerNote: "Chỉ dùng để demo. Quyết định dùng thuốc nên được kiểm tra với nhân viên y tế có chuyên môn.",
+    noDosesScheduled: "Chưa có liều nào hôm nay.",
+    noActiveTreatment: "Chưa có liệu trình đang chạy.",
+    dosesConfirmed: "Đã xác nhận {done}/{total} liều.",
+    dayOfTreatment: "Ngày {elapsed} trên {total}. Còn {left} ngày.",
+    activeTreatment: "{elapsed}/{total} ngày điều trị, hoàn thành {percent}%",
+    totalConfirmedDoses: "Tổng {count} liều đã xác nhận",
+    medicineMeta: "{dose} - {times} - bắt đầu {start} - {days} ngày",
+    noMedicationScheduled: "Chưa có thuốc trong lịch.",
+    noMedicationAdded: "Chưa thêm thuốc.",
+    noPendingAccessRequests: "Không có yêu cầu truy cập đang chờ.",
+    taken: "Đã uống",
+    markTaken: "Đánh dấu đã uống",
+    loadingSharedSpace: "Đang tải không gian chăm sóc",
+    checkingSession: "Đang kiểm tra phiên Supabase...",
+    noSharedSpace: "Chưa có không gian chăm sóc",
+    signInCreateSpace: "Đăng nhập để tạo Solar + Nguyet Care Space.",
+    creatingSpace: "Đang tạo không gian chăm sóc...",
+    publicViewer: "người xem công khai",
+    none: "không có",
+    signInRequestAccess: "{access}. Đăng nhập để xin quyền chỉnh sửa.",
+    signedInStatus: "{email} - {access}",
+    readOnlySync: "Chỉ xem",
+    editableSync: "Có thể chỉnh sửa",
+    supabaseSync: "Supabase sync",
+    alertEditorMedication: "Đăng nhập bằng tài khoản có quyền chỉnh sửa trước khi đổi thuốc.",
+    alertTimes: "Nhập giờ theo định dạng 24h, ví dụ 08:00, 20:00.",
+    alertStartDate: "Nhập ngày bắt đầu dạng MM/DD/YYYY, ví dụ 06/07/2026.",
+    alertDoseLogs: "Đăng nhập bằng tài khoản có quyền chỉnh sửa trước khi đổi lịch sử liều.",
+    alertEmailPassword: "Nhập email và mật khẩu.",
+    alertAccountCreated: "Đã tạo tài khoản. Kiểm tra email nếu Supabase yêu cầu xác nhận, rồi đăng nhập.",
+    alertDeleteMedication: "Đăng nhập bằng tài khoản có quyền chỉnh sửa trước khi xóa thuốc.",
+    confirmDeleteMedication: "Xóa thuốc này?",
+    alertEditMedication: "Đăng nhập bằng tài khoản có quyền chỉnh sửa trước khi sửa thuốc.",
+    alertSignInFirst: "Đăng nhập trước, rồi xin quyền truy cập.",
+    alertAccessRequestSent: "Đã gửi yêu cầu truy cập.",
+    accessRequested: "Đã yêu cầu quyền {role}",
+    approve: "Duyệt",
+    reject: "Từ chối"
+  }
+};
 
 const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -17,6 +208,8 @@ let doseLogs = [];
 let requests = [];
 let channel = null;
 let editingMedicineId = null;
+let appTheme = localStorage.getItem(THEME_KEY) || "light";
+let appLanguage = localStorage.getItem(LANGUAGE_KEY) || "en";
 
 const form = document.querySelector("#medicineForm");
 const scheduleList = document.querySelector("#scheduleList");
@@ -53,10 +246,13 @@ const medicineStartDate = document.querySelector("#medicineStartDate");
 const medicineTimes = document.querySelector("#medicineTimes");
 const medicineNote = document.querySelector("#medicineNote");
 const storageMode = document.querySelector("#storageMode");
+const themeButtons = document.querySelectorAll("[data-theme-value]");
+const languageButtons = document.querySelectorAll("[data-language-value]");
 
 init();
 
 async function init() {
+  applyPreferences();
   const result = await client.auth.getSession();
   session = result.data.session;
   bindEvents();
@@ -81,16 +277,22 @@ function bindEvents() {
   refreshData.addEventListener("click", loadApp);
   requestAccess.addEventListener("click", createAccessRequest);
   cancelEditButton.addEventListener("click", resetMedicineForm);
+  themeButtons.forEach((button) =>
+    button.addEventListener("click", () => setTheme(button.dataset.themeValue))
+  );
+  languageButtons.forEach((button) =>
+    button.addEventListener("click", () => setLanguage(button.dataset.languageValue))
+  );
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (!canEdit()) return alert("Sign in with editor access before changing medication.");
+    if (!canEdit()) return alert(t("alertEditorMedication"));
 
     const data = new FormData(form);
     const times = parseTimes(data.get("times"));
-    if (!times.length) return alert("Enter times in 24-hour format, for example 08:00, 20:00.");
+    if (!times.length) return alert(t("alertTimes"));
     const startDate = parseEnglishDate(data.get("start_date"));
-    if (!startDate) return alert("Enter the start date as MM/DD/YYYY, for example 06/07/2026.");
+    if (!startDate) return alert(t("alertStartDate"));
 
     const payload = {
       name: data.get("name").trim(),
@@ -115,7 +317,7 @@ function bindEvents() {
   });
 
   resetToday.addEventListener("click", async () => {
-    if (!canEdit()) return alert("Sign in with editor access before changing dose logs.");
+    if (!canEdit()) return alert(t("alertDoseLogs"));
     const { error } = await client.from("dose_logs").delete().eq("space_id", careSpace.id).eq("dose_date", getTodayKey());
     if (error) return alert(error.message);
     await loadData();
@@ -135,10 +337,76 @@ function bindEvents() {
   document.addEventListener("click", handleActionClick);
 }
 
+function setTheme(theme) {
+  appTheme = theme === "dark" ? "dark" : "light";
+  localStorage.setItem(THEME_KEY, appTheme);
+  applyTheme();
+}
+
+function setLanguage(language) {
+  appLanguage = language === "vi" ? "vi" : "en";
+  localStorage.setItem(LANGUAGE_KEY, appLanguage);
+  applyStaticTranslations();
+  updateMedicineFormText();
+  render();
+}
+
+function applyPreferences() {
+  if (!["light", "dark"].includes(appTheme)) appTheme = "light";
+  if (!["en", "vi"].includes(appLanguage)) appLanguage = "en";
+  applyTheme();
+  applyStaticTranslations();
+}
+
+function applyTheme() {
+  document.documentElement.dataset.theme = appTheme;
+  themeButtons.forEach((button) => {
+    const active = button.dataset.themeValue === appTheme;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function applyStaticTranslations() {
+  document.documentElement.lang = appLanguage;
+  document.title = t("pageTitle");
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    element.placeholder = t(element.dataset.i18nPlaceholder);
+  });
+
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
+  });
+
+  languageButtons.forEach((button) => {
+    const active = button.dataset.languageValue === appLanguage;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function updateMedicineFormText() {
+  medicineFormTitle.textContent = editingMedicineId ? t("editMedication") : t("addMedication");
+  addMedicineButton.textContent = editingMedicineId ? t("save") : t("add");
+}
+
+function t(key) {
+  return translations[appLanguage]?.[key] || translations.en[key] || key;
+}
+
+function formatMessage(key, values) {
+  return t(key).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? "");
+}
+
 async function signIn() {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
-  if (!email || !password) return alert("Enter email and password.");
+  if (!email || !password) return alert(t("alertEmailPassword"));
   const { error } = await client.auth.signInWithPassword({ email, password });
   if (error) alert(error.message);
 }
@@ -146,7 +414,7 @@ async function signIn() {
 async function signUp() {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
-  if (!email || !password) return alert("Enter email and password.");
+  if (!email || !password) return alert(t("alertEmailPassword"));
   const { error } = await client.auth.signUp({
     email,
     password,
@@ -155,11 +423,11 @@ async function signUp() {
     }
   });
   if (error) return alert(error.message);
-  alert("Account created. Check email if Supabase asks for confirmation, then sign in.");
+  alert(t("alertAccountCreated"));
 }
 
 async function loadApp() {
-  authStatus.textContent = "Loading shared care space...";
+  authStatus.textContent = t("loadingSharedSpace") + "...";
   await resolveCareSpace();
   await loadData();
   subscribeRealtime();
@@ -185,8 +453,8 @@ async function resolveCareSpace() {
 
   if (!careSpace) {
     role = null;
-    spaceName.textContent = "No shared care space yet";
-    authStatus.textContent = "Sign in to create Solar + Nguyet Care Space.";
+    spaceName.textContent = t("noSharedSpace");
+    authStatus.textContent = t("signInCreateSpace");
     return;
   }
 
@@ -272,7 +540,7 @@ async function handleActionClick(event) {
   const { action, id, time } = button.dataset;
 
   if (action === "toggle-dose") {
-    if (!canEdit()) return alert("Sign in with editor access before changing dose logs.");
+    if (!canEdit()) return alert(t("alertDoseLogs"));
     const today = getTodayKey();
     const existing = doseLogs.find((log) => log.medicine_id === id && log.dose_time === time && log.dose_date === today);
     const result = existing
@@ -288,14 +556,14 @@ async function handleActionClick(event) {
   }
 
   if (action === "delete-medicine") {
-    if (!canEdit()) return alert("Sign in with editor access before deleting medication.");
-    if (!confirm("Delete this medication?")) return;
+    if (!canEdit()) return alert(t("alertDeleteMedication"));
+    if (!confirm(t("confirmDeleteMedication"))) return;
     const { error } = await client.from("medicines").delete().eq("id", id);
     if (error) return alert(error.message);
   }
 
   if (action === "edit-medicine") {
-    if (!canEdit()) return alert("Sign in with editor access before editing medication.");
+    if (!canEdit()) return alert(t("alertEditMedication"));
     startMedicineEdit(id);
     return;
   }
@@ -330,7 +598,7 @@ async function handleActionClick(event) {
 }
 
 async function createAccessRequest() {
-  if (!session) return alert("Sign in first, then request access.");
+  if (!session) return alert(t("alertSignInFirst"));
   const { error } = await client.from("access_requests").insert({
     space_id: careSpace.id,
     requester_id: session.user.id,
@@ -338,7 +606,7 @@ async function createAccessRequest() {
     message: "Requesting editor access from MedTrack."
   });
   if (error) return alert(error.message);
-  alert("Access request sent.");
+  alert(t("alertAccessRequestSent"));
   await loadData();
 }
 
@@ -353,8 +621,8 @@ function render() {
 function renderShell() {
   const signedIn = Boolean(session);
   if (!careSpace) {
-    spaceName.textContent = "No shared care space yet";
-    authStatus.textContent = signedIn ? "Creating shared care space..." : "Sign in to create Solar + Nguyet Care Space.";
+    spaceName.textContent = t("noSharedSpace");
+    authStatus.textContent = signedIn ? t("creatingSpace") : t("signInCreateSpace");
     signOutButton.hidden = !signedIn;
     emailInput.hidden = signedIn;
     passwordInput.hidden = signedIn;
@@ -364,15 +632,15 @@ function renderShell() {
     addMedicineButton.disabled = true;
     resetMedicineForm();
     resetToday.disabled = true;
-    storageMode.textContent = "Read-only sync";
+    storageMode.textContent = t("readOnlySync");
     return;
   }
 
-  const access = role || (careSpace?.public_read ? "public viewer" : "none");
+  const access = role || (careSpace?.public_read ? t("publicViewer") : t("none"));
   spaceName.textContent = careSpace.name;
   authStatus.textContent = signedIn
-    ? `${session.user.email} - ${access}`
-    : `${access}. Sign in to request edit access.`;
+    ? formatMessage("signedInStatus", { email: session.user.email, access })
+    : formatMessage("signInRequestAccess", { access });
   signOutButton.hidden = !signedIn;
   emailInput.hidden = signedIn;
   passwordInput.hidden = signedIn;
@@ -382,7 +650,7 @@ function renderShell() {
   addMedicineButton.disabled = !canEdit();
   if (!canEdit()) resetMedicineForm();
   resetToday.disabled = !canEdit();
-  storageMode.textContent = canEdit() ? "Editable sync" : "Read-only sync";
+  storageMode.textContent = canEdit() ? t("editableSync") : t("readOnlySync");
 }
 
 function renderToday() {
@@ -403,7 +671,9 @@ function renderToday() {
 
   todayProgress.textContent = `${percentage}%`;
   todayProgressBar.style.width = `${percentage}%`;
-  todaySummary.textContent = doses.length ? `${doneCount}/${doses.length} doses confirmed.` : "No doses scheduled.";
+  todaySummary.textContent = doses.length
+    ? formatMessage("dosesConfirmed", { done: doneCount, total: doses.length })
+    : t("noDosesScheduled");
   activeMeds.textContent = medicines.length;
   dailyDoses.textContent = doses.length;
   completedDoses.textContent = doneCount;
@@ -419,13 +689,13 @@ function renderToday() {
                 <p class="dose-meta">${escapeHtml(medicine.dose)}${medicine.note ? ` - ${escapeHtml(medicine.note)}` : ""}</p>
               </div>
               <button class="${done ? "ghost" : "primary"}" data-action="toggle-dose" data-id="${medicine.id}" data-time="${time}" ${canEdit() ? "" : "disabled"}>
-                ${done ? "Taken" : "Mark taken"}
+                ${done ? t("taken") : t("markTaken")}
               </button>
             </article>
           `
         )
         .join("")
-    : `<div class="empty">No medication scheduled yet.</div>`;
+    : `<div class="empty">${t("noMedicationScheduled")}</div>`;
 }
 
 function renderOverallProgress() {
@@ -434,8 +704,8 @@ function renderOverallProgress() {
   overallProgress.textContent = `${progress.percent}%`;
   overallProgressBar.style.width = `${progress.percent}%`;
   overallSummary.textContent = progress.totalDays
-    ? `Day ${progress.elapsedDays} of ${progress.totalDays}. ${progress.daysLeft} days left.`
-    : "No active treatment.";
+    ? formatMessage("dayOfTreatment", { elapsed: progress.elapsedDays, total: progress.totalDays, left: progress.daysLeft })
+    : t("noActiveTreatment");
 }
 
 function renderMedicines() {
@@ -447,22 +717,22 @@ function renderMedicines() {
             <article class="medicine-card">
               <div>
                 <p class="medicine-title">${escapeHtml(medicine.name)}</p>
-                <p class="medicine-meta">${escapeHtml(medicine.dose)} - ${medicine.times.join(", ")} - starts ${formatEnglishDate(getMedicineStartKey(medicine))} - ${medicine.days} days</p>
-                <p class="medicine-meta">${progress.elapsed}/${medicine.days} treatment days, ${progress.percent}% complete</p>
-                <p class="medicine-meta">${getTakenCount(medicine.id)} total confirmed doses</p>
+                <p class="medicine-meta">${escapeHtml(formatMessage("medicineMeta", { dose: medicine.dose, times: medicine.times.join(", "), start: formatEnglishDate(getMedicineStartKey(medicine)), days: medicine.days }))}</p>
+                <p class="medicine-meta">${escapeHtml(formatMessage("activeTreatment", { elapsed: progress.elapsed, total: medicine.days, percent: progress.percent }))}</p>
+                <p class="medicine-meta">${escapeHtml(formatMessage("totalConfirmedDoses", { count: getTakenCount(medicine.id) }))}</p>
                 <div class="medicine-progress" aria-label="Treatment progress">
                   <span style="width: ${progress.percent}%"></span>
                 </div>
               </div>
               <div class="medicine-actions">
-                <button class="ghost" data-action="edit-medicine" data-id="${medicine.id}" ${canEdit() ? "" : "disabled"}>Edit</button>
-                <button class="danger" data-action="delete-medicine" data-id="${medicine.id}" ${canEdit() ? "" : "disabled"}>Delete</button>
+                <button class="ghost" data-action="edit-medicine" data-id="${medicine.id}" ${canEdit() ? "" : "disabled"}>${t("edit")}</button>
+                <button class="danger" data-action="delete-medicine" data-id="${medicine.id}" ${canEdit() ? "" : "disabled"}>${t("delete")}</button>
               </div>
             </article>
           `;
         })
         .join("")
-    : `<div class="empty">No medication added yet.</div>`;
+    : `<div class="empty">${t("noMedicationAdded")}</div>`;
 }
 
 function renderRequests() {
@@ -476,17 +746,17 @@ function renderRequests() {
             <article class="medicine-card">
               <div>
                 <p class="medicine-title">${escapeHtml(request.requester_id)}</p>
-                <p class="medicine-meta">Requested ${escapeHtml(request.requested_role)} access</p>
+                <p class="medicine-meta">${escapeHtml(formatMessage("accessRequested", { role: request.requested_role }))}</p>
               </div>
               <div class="medicine-actions">
-                <button class="primary" data-action="approve-request" data-id="${request.id}">Approve</button>
-                <button class="danger" data-action="reject-request" data-id="${request.id}">Reject</button>
+                <button class="primary" data-action="approve-request" data-id="${request.id}">${t("approve")}</button>
+                <button class="danger" data-action="reject-request" data-id="${request.id}">${t("reject")}</button>
               </div>
             </article>
           `
         )
         .join("")
-    : `<div class="empty">No pending access requests.</div>`;
+    : `<div class="empty">${t("noPendingAccessRequests")}</div>`;
 }
 
 function parseTimes(value) {
@@ -557,8 +827,7 @@ function startMedicineEdit(id) {
   medicineStartDate.value = formatEnglishDate(getMedicineStartKey(medicine));
   medicineTimes.value = medicine.times.join(", ");
   medicineNote.value = medicine.note || "";
-  medicineFormTitle.textContent = "Edit medication";
-  addMedicineButton.textContent = "Save";
+  updateMedicineFormText();
   cancelEditButton.hidden = false;
   form.scrollIntoView({ behavior: "smooth", block: "start" });
   medicineName.focus();
@@ -569,8 +838,7 @@ function resetMedicineForm() {
   form.reset();
   medicineDays.value = 7;
   medicineStartDate.value = formatEnglishDate(getTodayKey());
-  medicineFormTitle.textContent = "Add medication";
-  addMedicineButton.textContent = "Add";
+  updateMedicineFormText();
   cancelEditButton.hidden = true;
 }
 

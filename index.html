@@ -4,68 +4,78 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedTrack Demo</title>
-    <link rel="stylesheet" href="./styles.css?v=english-date-layout-20260607" />
+    <link rel="stylesheet" href="./styles.css?v=theme-language-20260607" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
     <main class="app-shell">
       <section class="overview">
         <div>
-          <p class="eyebrow">Treatment tracker</p>
+          <div class="app-controls" aria-label="Display settings">
+            <div class="switch-group" aria-label="Theme">
+              <button id="lightModeButton" class="switch-button" type="button" data-theme-value="light" data-i18n="lightMode">Light</button>
+              <button id="darkModeButton" class="switch-button" type="button" data-theme-value="dark" data-i18n="darkMode">Dark</button>
+            </div>
+            <div class="switch-group" aria-label="Language">
+              <button id="englishButton" class="switch-button" type="button" data-language-value="en" data-i18n="englishLanguage">English</button>
+              <button id="vietnameseButton" class="switch-button" type="button" data-language-value="vi" data-i18n="vietnameseLanguage">Vietnamese</button>
+            </div>
+          </div>
+          <p class="eyebrow" data-i18n="heroEyebrow">Treatment tracker</p>
           <h1>MedTrack</h1>
-          <p class="subcopy">Manage medication, daily doses, and treatment progress from one focused dashboard.</p>
+          <p class="subcopy" data-i18n="heroSubcopy">Manage medication, daily doses, and treatment progress from one focused dashboard.</p>
         </div>
         <div class="overview-cards">
           <div class="today-card">
-            <span>Today</span>
+            <span data-i18n="today">Today</span>
             <strong id="todayProgress">0%</strong>
-            <div class="progress-track" aria-label="Today's progress">
+            <div class="progress-track" data-i18n-aria-label="todayProgressLabel" aria-label="Today's progress">
               <div id="todayProgressBar" class="progress-fill"></div>
             </div>
-            <small id="todaySummary">No doses scheduled.</small>
+            <small id="todaySummary" data-i18n="noDosesScheduled">No doses scheduled.</small>
           </div>
           <div class="today-card">
-            <span>Treatment</span>
+            <span data-i18n="treatment">Treatment</span>
             <strong id="overallProgress">0%</strong>
-            <div class="progress-track" aria-label="Overall treatment progress">
+            <div class="progress-track" data-i18n-aria-label="overallProgressLabel" aria-label="Overall treatment progress">
               <div id="overallProgressBar" class="progress-fill"></div>
             </div>
-            <small id="overallSummary">No active treatment.</small>
+            <small id="overallSummary" data-i18n="noActiveTreatment">No active treatment.</small>
           </div>
         </div>
       </section>
 
       <section class="stats-row" aria-label="Medication summary">
         <article>
-          <span>Active meds</span>
+          <span data-i18n="activeMeds">Active meds</span>
           <strong id="activeMeds">0</strong>
         </article>
         <article>
-          <span>Daily doses</span>
+          <span data-i18n="dailyDoses">Daily doses</span>
           <strong id="dailyDoses">0</strong>
         </article>
         <article>
-          <span>Completed today</span>
+          <span data-i18n="completedToday">Completed today</span>
           <strong id="completedDoses">0</strong>
         </article>
         <article>
-          <span>Storage</span>
+          <span data-i18n="storage">Storage</span>
           <strong id="storageMode">Supabase sync</strong>
         </article>
       </section>
 
       <section class="panel auth-panel">
         <div>
-          <p class="eyebrow">Access</p>
-          <h2 id="spaceName">Loading shared care space</h2>
-          <p id="authStatus">Checking Supabase session...</p>
+          <p class="eyebrow" data-i18n="access">Access</p>
+          <h2 id="spaceName" data-i18n="loadingSharedSpace">Loading shared care space</h2>
+          <p id="authStatus" data-i18n="checkingSession">Checking Supabase session...</p>
         </div>
         <form id="authForm" class="auth-form">
-          <input id="emailInput" name="email" type="email" placeholder="Email" autocomplete="email" />
-          <input id="passwordInput" name="password" type="password" placeholder="Password" autocomplete="current-password" />
-          <button id="signInButton" class="primary" type="submit">Sign in</button>
-          <button id="signUpButton" class="ghost" type="button">Sign up</button>
-          <button id="signOutButton" class="ghost" type="button" hidden>Sign out</button>
+          <input id="emailInput" name="email" type="email" placeholder="Email" data-i18n-placeholder="emailPlaceholder" autocomplete="email" />
+          <input id="passwordInput" name="password" type="password" placeholder="Password" data-i18n-placeholder="passwordPlaceholder" autocomplete="current-password" />
+          <button id="signInButton" class="primary" type="submit" data-i18n="signIn">Sign in</button>
+          <button id="signUpButton" class="ghost" type="button" data-i18n="signUp">Sign up</button>
+          <button id="signOutButton" class="ghost" type="button" data-i18n="signOut" hidden>Sign out</button>
         </form>
       </section>
 
@@ -73,29 +83,29 @@
         <form id="medicineForm" class="panel form-panel">
           <div class="panel-header">
             <div>
-              <p class="eyebrow">Medication</p>
+              <p class="eyebrow" data-i18n="medication">Medication</p>
               <h2 id="medicineFormTitle">Add medication</h2>
             </div>
           </div>
 
           <label>
-            Medication name
-            <input id="medicineName" name="name" placeholder="Example: Amoxicillin" required />
+            <span data-i18n="medicationName">Medication name</span>
+            <input id="medicineName" name="name" placeholder="Example: Amoxicillin" data-i18n-placeholder="medicineNamePlaceholder" required />
           </label>
 
           <div class="two-col">
             <label>
-              Dosage
-              <input id="medicineDose" name="dose" placeholder="500mg" required />
+              <span data-i18n="dosage">Dosage</span>
+              <input id="medicineDose" name="dose" placeholder="500mg" data-i18n-placeholder="dosagePlaceholder" required />
             </label>
             <label>
-              Duration
+              <span data-i18n="duration">Duration</span>
               <input id="medicineDays" name="days" type="number" min="1" max="365" value="7" required />
             </label>
           </div>
 
           <label>
-            Start date
+            <span data-i18n="startDate">Start date</span>
             <input
               id="medicineStartDate"
               name="start_date"
@@ -103,22 +113,23 @@
               inputmode="numeric"
               autocomplete="off"
               placeholder="MM/DD/YYYY"
+              data-i18n-placeholder="startDatePlaceholder"
               required
             />
           </label>
 
           <label>
-            Dose times
-            <input id="medicineTimes" name="times" placeholder="08:00, 20:00" required />
+            <span data-i18n="doseTimes">Dose times</span>
+            <input id="medicineTimes" name="times" placeholder="08:00, 20:00" data-i18n-placeholder="doseTimesPlaceholder" required />
           </label>
 
           <label>
-            Notes
-            <textarea id="medicineNote" name="note" rows="3" placeholder="After meals, avoid dairy..."></textarea>
+            <span data-i18n="notes">Notes</span>
+            <textarea id="medicineNote" name="note" rows="3" placeholder="After meals, avoid dairy..." data-i18n-placeholder="notesPlaceholder"></textarea>
           </label>
 
           <div class="form-actions">
-            <button id="cancelEditButton" type="button" class="ghost" hidden>Cancel</button>
+            <button id="cancelEditButton" type="button" class="ghost" data-i18n="cancel" hidden>Cancel</button>
             <button id="addMedicineButton" type="submit" class="primary">Add</button>
           </div>
         </form>
@@ -126,13 +137,13 @@
         <section class="panel">
           <div class="panel-header">
             <div>
-              <p class="eyebrow">Schedule</p>
-              <h2>Today's doses</h2>
+              <p class="eyebrow" data-i18n="schedule">Schedule</p>
+              <h2 data-i18n="todaysDoses">Today's doses</h2>
             </div>
           </div>
           <div id="scheduleList" class="schedule-list"></div>
           <div class="schedule-actions">
-            <button id="resetToday" class="ghost" type="button">Reset today</button>
+            <button id="resetToday" class="ghost" type="button" data-i18n="resetToday">Reset today</button>
           </div>
         </section>
       </section>
@@ -140,26 +151,26 @@
       <section class="panel">
         <div class="panel-header">
             <div>
-              <p class="eyebrow">Progress</p>
-              <h2>Medication list</h2>
+              <p class="eyebrow" data-i18n="progress">Progress</p>
+              <h2 data-i18n="medicationList">Medication list</h2>
             </div>
-          <button id="requestAccess" class="ghost" type="button" hidden>Request edit access</button>
+          <button id="requestAccess" class="ghost" type="button" data-i18n="requestEditAccess" hidden>Request edit access</button>
         </div>
         <div id="medicineList" class="medicine-list"></div>
       </section>
 
       <section class="panel data-panel">
         <div>
-          <p class="eyebrow">Data</p>
-          <h2>Sharing and backup</h2>
-          <p>
+          <p class="eyebrow" data-i18n="data">Data</p>
+          <h2 data-i18n="sharingBackup">Sharing and backup</h2>
+          <p data-i18n="dataDescription">
             Data syncs through Supabase with row-level security. Public visitors can view this care space. Signed-in editors
             can add medicines and confirm doses.
           </p>
         </div>
         <div class="data-actions">
-          <button id="refreshData" class="ghost" type="button">Refresh</button>
-          <button id="exportData" class="ghost" type="button">Export JSON</button>
+          <button id="refreshData" class="ghost" type="button" data-i18n="refresh">Refresh</button>
+          <button id="exportData" class="ghost" type="button" data-i18n="exportJson">Export JSON</button>
         </div>
       </section>
 
@@ -167,17 +178,17 @@
         <div class="panel-header">
           <div>
             <p class="eyebrow">ACL</p>
-            <h2>Access requests</h2>
+            <h2 data-i18n="accessRequests">Access requests</h2>
           </div>
         </div>
         <div id="requestsList" class="medicine-list"></div>
       </section>
 
-      <footer class="footer-note">
+      <footer class="footer-note" data-i18n="footerNote">
         Demo only. Medication decisions should be checked with a qualified clinician.
       </footer>
     </main>
 
-    <script src="./app.js?v=english-date-layout-20260607"></script>
+    <script src="./app.js?v=theme-language-20260607"></script>
   </body>
 </html>
