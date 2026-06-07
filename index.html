@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedTrack Demo</title>
-    <link rel="stylesheet" href="./styles.css?v=form-layout-mobile-20260607" />
+    <link rel="stylesheet" href="./styles.css?v=english-date-layout-20260607" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
@@ -96,7 +96,15 @@
 
           <label>
             Start date
-            <input id="medicineStartDate" name="start_date" type="date" required />
+            <input
+              id="medicineStartDate"
+              name="start_date"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              placeholder="MM/DD/YYYY"
+              required
+            />
           </label>
 
           <label>
@@ -121,9 +129,11 @@
               <p class="eyebrow">Schedule</p>
               <h2>Today's doses</h2>
             </div>
-            <button id="resetToday" class="ghost" type="button">Reset today</button>
           </div>
           <div id="scheduleList" class="schedule-list"></div>
+          <div class="schedule-actions">
+            <button id="resetToday" class="ghost" type="button">Reset today</button>
+          </div>
         </section>
       </section>
 
@@ -168,6 +178,6 @@
       </footer>
     </main>
 
-    <script src="./app.js?v=start-date-20260606"></script>
+    <script src="./app.js?v=english-date-layout-20260607"></script>
   </body>
 </html>

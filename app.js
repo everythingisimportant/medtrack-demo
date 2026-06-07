@@ -89,11 +89,13 @@ function bindEvents() {
     const data = new FormData(form);
     const times = parseTimes(data.get("times"));
     if (!times.length) return alert("Enter times in 24-hour format, for example 08:00, 20:00.");
+    const startDate = parseEnglishDate(data.get("start_date"));
+    if (!startDate) return alert("Enter the start date as MM/DD/YYYY, for example 06/07/2026.");
 
     const payload = {
       name: data.get("name").trim(),
       dose: data.get("dose").trim(),
-      start_date: data.get("start_date"),
+      start_date: startDate,
       days: Number(data.get("days")),
       times,
       note: data.get("note").trim()
@@ -445,7 +447,7 @@ function renderMedicines() {
             <article class="medicine-card">
               <div>
                 <p class="medicine-title">${escapeHtml(medicine.name)}</p>
-                <p class="medicine-meta">${escapeHtml(medicine.dose)} - ${medicine.times.join(", ")} - starts ${getMedicineStartKey(medicine)} - ${medicine.days} days</p>
+                <p class="medicine-meta">${escapeHtml(medicine.dose)} - ${medicine.times.join(", ")} - starts ${formatEnglishDate(getMedicineStartKey(medicine))} - ${medicine.days} days</p>
                 <p class="medicine-meta">${progress.elapsed}/${medicine.days} treatment days, ${progress.percent}% complete</p>
                 <p class="medicine-meta">${getTakenCount(medicine.id)} total confirmed doses</p>
                 <div class="medicine-progress" aria-label="Treatment progress">
@@ -530,7 +532,7 @@ function getTakenCount(medicineId) {
 }
 
 function getMedicineStartDate(medicine) {
-  return startOfDay(new Date(getMedicineStartKey(medicine)));
+  return parseIsoDate(getMedicineStartKey(medicine));
 }
 
 function getMedicineStartKey(medicine) {
@@ -538,7 +540,7 @@ function getMedicineStartKey(medicine) {
 }
 
 function isMedicineActiveOn(medicine, dateKey) {
-  const target = startOfDay(new Date(dateKey));
+  const target = parseIsoDate(dateKey);
   const start = getMedicineStartDate(medicine);
   const end = addDays(start, Math.max(1, Number(medicine.days)));
   return target >= start && target < end;
@@ -552,7 +554,7 @@ function startMedicineEdit(id) {
   medicineName.value = medicine.name;
   medicineDose.value = medicine.dose;
   medicineDays.value = medicine.days;
-  medicineStartDate.value = getMedicineStartKey(medicine);
+  medicineStartDate.value = formatEnglishDate(getMedicineStartKey(medicine));
   medicineTimes.value = medicine.times.join(", ");
   medicineNote.value = medicine.note || "";
   medicineFormTitle.textContent = "Edit medication";
@@ -566,7 +568,7 @@ function resetMedicineForm() {
   editingMedicineId = null;
   form.reset();
   medicineDays.value = 7;
-  medicineStartDate.value = getTodayKey();
+  medicineStartDate.value = formatEnglishDate(getTodayKey());
   medicineFormTitle.textContent = "Add medication";
   addMedicineButton.textContent = "Add";
   cancelEditButton.hidden = true;
@@ -585,6 +587,40 @@ function getTodayKey() {
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function parseEnglishDate(value) {
+  const match = String(value || "").trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!match) return null;
+
+  const month = Number(match[1]);
+  const day = Number(match[2]);
+  const year = Number(match[3]);
+  if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+
+  const date = new Date(year, month - 1, day);
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
+  return formatIsoDate(date);
+}
+
+function formatEnglishDate(dateKey) {
+  const date = parseIsoDate(dateKey);
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${month}/${day}/${date.getFullYear()}`;
+}
+
+function parseIsoDate(dateKey) {
+  const match = String(dateKey || getTodayKey()).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return startOfDay(new Date(dateKey));
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+function formatIsoDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
