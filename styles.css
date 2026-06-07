@@ -26,6 +26,7 @@ button,
 input,
 textarea {
   font: inherit;
+  min-width: 0;
 }
 
 button {
@@ -245,19 +246,27 @@ textarea {
 }
 
 input[type="date"] {
+  display: block;
+  min-width: 0;
   min-height: 48px;
-  padding-right: 48px;
+  padding: 12px 13px;
   line-height: 1.2;
+  appearance: none;
+  -webkit-appearance: none;
+  background-clip: padding-box;
   color-scheme: light;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-  width: 24px;
-  height: 24px;
-  margin-right: -6px;
-  padding: 8px;
+  margin: 0;
+  padding: 0;
   border-radius: 8px;
   cursor: pointer;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+  min-height: 1.2em;
+  text-align: left;
 }
 
 input:focus,
