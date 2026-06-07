@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedTrack Demo</title>
-    <link rel="stylesheet" href="./styles.css?v=icon-controls-dose-color-20260607" />
+    <link rel="stylesheet" href="./styles.css?v=flag-language-muted-taken-20260607" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
@@ -13,10 +13,10 @@
         <div>
           <div class="app-controls" aria-label="Display settings">
             <button id="themeToggle" class="icon-control" type="button" aria-label="Switch to dark mode">
-              <span id="themeIcon" aria-hidden="true">☀</span>
+              <span id="themeIcon" aria-hidden="true"></span>
             </button>
             <div class="icon-select">
-              <span aria-hidden="true">🌐</span>
+              <span id="languageFlag" class="flag-icon flag-en" aria-hidden="true"></span>
               <select id="languageSelect" aria-label="Language">
                 <option value="en" data-i18n="englishLanguage">English</option>
                 <option value="vi" data-i18n="vietnameseLanguage">Vietnamese</option>
@@ -191,6 +191,6 @@
       </footer>
     </main>
 
-    <script src="./app.js?v=icon-controls-dose-color-20260607"></script>
+    <script src="./app.js?v=flag-language-muted-taken-20260607"></script>
   </body>
 </html>

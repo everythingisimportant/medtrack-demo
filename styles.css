@@ -128,12 +128,10 @@ button:disabled {
 
 .icon-control {
   background: rgba(255, 255, 255, 0.94);
-  font-size: 1.02rem;
 }
 
 .icon-select {
   background: rgba(255, 255, 255, 0.94);
-  font-size: 0.96rem;
 }
 
 .icon-select::after {
@@ -164,6 +162,53 @@ button:disabled {
 .icon-select select option {
   color: var(--ink);
   background: var(--panel);
+}
+
+.theme-svg {
+  width: 21px;
+  height: 21px;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.flag-icon {
+  position: relative;
+  width: 24px;
+  height: 16px;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14);
+}
+
+.flag-en {
+  background:
+    linear-gradient(#b22234 0 7.7%, #fff 7.7% 15.4%, #b22234 15.4% 23.1%, #fff 23.1% 30.8%, #b22234 30.8% 38.5%, #fff 38.5% 46.2%, #b22234 46.2% 53.9%, #fff 53.9% 61.6%, #b22234 61.6% 69.3%, #fff 69.3% 77%, #b22234 77% 84.7%, #fff 84.7% 92.4%, #b22234 92.4% 100%);
+}
+
+.flag-en::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 9px;
+  background: #3c3b6e;
+}
+
+.flag-vi {
+  display: grid;
+  place-items: center;
+  color: #ffdf00;
+  background: #da251d;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.flag-vi::before {
+  content: "★";
 }
 
 .icon-control:focus,
@@ -463,7 +508,7 @@ textarea:focus {
 
 .dose-row.done {
   border-color: color-mix(in srgb, var(--accent) 58%, var(--line));
-  background: color-mix(in srgb, var(--accent) 14%, var(--card));
+  background: color-mix(in srgb, var(--accent) 10%, var(--card));
 }
 
 .dose-row.done .time-chip {
@@ -477,13 +522,18 @@ textarea:focus {
 }
 
 :root[data-theme="dark"] .dose-row.done {
-  background: #263b31;
+  border-color: #3e5d4c;
+  background: #1d2c24;
 }
 
 :root[data-theme="dark"] .dose-row.done .time-chip,
 :root[data-theme="dark"] .dose-row.done .ghost {
-  color: #06100b;
-  background: #86d9ad;
+  color: #dff4e6;
+  background: #315844;
+}
+
+:root[data-theme="dark"] .dose-row.done .ghost {
+  border: 1px solid #49735d;
 }
 
 .dose-title,

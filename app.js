@@ -4,7 +4,7 @@ const PUBLIC_APP_URL = "https://everythingisimportant.github.io/medtrack-demo/";
 const THEME_KEY = "medtrack-theme";
 const LANGUAGE_KEY = "medtrack-language";
 const PREF_VERSION_KEY = "medtrack-pref-version";
-const PREF_VERSION = "icon-controls-default-20260607";
+const PREF_VERSION = "flag-language-muted-taken-20260607";
 
 const translations = {
   en: {
@@ -258,6 +258,7 @@ const medicineNote = document.querySelector("#medicineNote");
 const storageMode = document.querySelector("#storageMode");
 const themeToggle = document.querySelector("#themeToggle");
 const themeIcon = document.querySelector("#themeIcon");
+const languageFlag = document.querySelector("#languageFlag");
 const languageSelect = document.querySelector("#languageSelect");
 
 init();
@@ -376,7 +377,7 @@ function applyPreferences() {
 
 function applyTheme() {
   document.documentElement.dataset.theme = appTheme;
-  themeIcon.textContent = appTheme === "dark" ? "☾" : "☀";
+  themeIcon.innerHTML = getThemeIcon(appTheme);
   themeToggle.setAttribute("aria-label", appTheme === "dark" ? t("switchToLight") : t("switchToDark"));
 }
 
@@ -397,7 +398,32 @@ function applyStaticTranslations() {
   });
 
   languageSelect.value = appLanguage;
+  languageFlag.className = `flag-icon ${appLanguage === "vi" ? "flag-vi" : "flag-en"}`;
   languageSelect.setAttribute("aria-label", t("languageLabel"));
+}
+
+function getThemeIcon(theme) {
+  if (theme === "dark") {
+    return `
+      <svg class="theme-svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a7.8 7.8 0 1 0 11 11Z"></path>
+      </svg>
+    `;
+  }
+
+  return `
+    <svg class="theme-svg" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2"></path>
+      <path d="M12 20v2"></path>
+      <path d="m4.93 4.93 1.41 1.41"></path>
+      <path d="m17.66 17.66 1.41 1.41"></path>
+      <path d="M2 12h2"></path>
+      <path d="M20 12h2"></path>
+      <path d="m6.34 17.66-1.41 1.41"></path>
+      <path d="m19.07 4.93-1.41 1.41"></path>
+    </svg>
+  `;
 }
 
 function updateMedicineFormText() {
