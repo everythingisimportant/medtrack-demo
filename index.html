@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedTrack Demo</title>
-    <link rel="stylesheet" href="./styles.css?v=theme-language-20260607" />
+    <link rel="stylesheet" href="./styles.css?v=dropdown-theme-language-20260607" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
@@ -12,13 +12,19 @@
       <section class="overview">
         <div>
           <div class="app-controls" aria-label="Display settings">
-            <div class="switch-group" aria-label="Theme">
-              <button id="lightModeButton" class="switch-button" type="button" data-theme-value="light" data-i18n="lightMode">Light</button>
-              <button id="darkModeButton" class="switch-button" type="button" data-theme-value="dark" data-i18n="darkMode">Dark</button>
+            <div class="control-select">
+              <label for="themeSelect" data-i18n="themeLabel">Theme</label>
+              <select id="themeSelect" aria-label="Theme">
+                <option value="light" data-i18n="lightMode">Light</option>
+                <option value="dark" data-i18n="darkMode">Dark</option>
+              </select>
             </div>
-            <div class="switch-group" aria-label="Language">
-              <button id="englishButton" class="switch-button" type="button" data-language-value="en" data-i18n="englishLanguage">English</button>
-              <button id="vietnameseButton" class="switch-button" type="button" data-language-value="vi" data-i18n="vietnameseLanguage">Vietnamese</button>
+            <div class="control-select">
+              <label for="languageSelect" data-i18n="languageLabel">Language</label>
+              <select id="languageSelect" aria-label="Language">
+                <option value="en" data-i18n="englishLanguage">English</option>
+                <option value="vi" data-i18n="vietnameseLanguage">Vietnamese</option>
+              </select>
             </div>
           </div>
           <p class="eyebrow" data-i18n="heroEyebrow">Treatment tracker</p>
@@ -189,6 +195,6 @@
       </footer>
     </main>
 
-    <script src="./app.js?v=theme-language-20260607"></script>
+    <script src="./app.js?v=dropdown-theme-language-20260607"></script>
   </body>
 </html>

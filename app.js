@@ -3,12 +3,16 @@ const SUPABASE_KEY = "sb_publishable_2-oT4-LmeP67RspMsh9oFw_oMcmKm2I";
 const PUBLIC_APP_URL = "https://everythingisimportant.github.io/medtrack-demo/";
 const THEME_KEY = "medtrack-theme";
 const LANGUAGE_KEY = "medtrack-language";
+const PREF_VERSION_KEY = "medtrack-pref-version";
+const PREF_VERSION = "dropdown-default-20260607";
 
 const translations = {
   en: {
     pageTitle: "MedTrack Demo",
+    themeLabel: "Theme",
     lightMode: "Light",
     darkMode: "Dark",
+    languageLabel: "Language",
     englishLanguage: "English",
     vietnameseLanguage: "Vietnamese",
     heroEyebrow: "Treatment tracker",
@@ -100,8 +104,10 @@ const translations = {
   },
   vi: {
     pageTitle: "MedTrack Demo",
+    themeLabel: "Giao diện",
     lightMode: "Sáng",
     darkMode: "Tối",
+    languageLabel: "Ngôn ngữ",
     englishLanguage: "English",
     vietnameseLanguage: "Tiếng Việt",
     heroEyebrow: "Theo dõi điều trị",
@@ -208,8 +214,8 @@ let doseLogs = [];
 let requests = [];
 let channel = null;
 let editingMedicineId = null;
-let appTheme = localStorage.getItem(THEME_KEY) || "light";
-let appLanguage = localStorage.getItem(LANGUAGE_KEY) || "en";
+let appTheme = getSavedPreference(THEME_KEY, "light");
+let appLanguage = getSavedPreference(LANGUAGE_KEY, "en");
 
 const form = document.querySelector("#medicineForm");
 const scheduleList = document.querySelector("#scheduleList");
@@ -246,8 +252,8 @@ const medicineStartDate = document.querySelector("#medicineStartDate");
 const medicineTimes = document.querySelector("#medicineTimes");
 const medicineNote = document.querySelector("#medicineNote");
 const storageMode = document.querySelector("#storageMode");
-const themeButtons = document.querySelectorAll("[data-theme-value]");
-const languageButtons = document.querySelectorAll("[data-language-value]");
+const themeSelect = document.querySelector("#themeSelect");
+const languageSelect = document.querySelector("#languageSelect");
 
 init();
 
@@ -277,12 +283,8 @@ function bindEvents() {
   refreshData.addEventListener("click", loadApp);
   requestAccess.addEventListener("click", createAccessRequest);
   cancelEditButton.addEventListener("click", resetMedicineForm);
-  themeButtons.forEach((button) =>
-    button.addEventListener("click", () => setTheme(button.dataset.themeValue))
-  );
-  languageButtons.forEach((button) =>
-    button.addEventListener("click", () => setLanguage(button.dataset.languageValue))
-  );
+  themeSelect.addEventListener("change", () => setTheme(themeSelect.value));
+  languageSelect.addEventListener("change", () => setLanguage(languageSelect.value));
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -337,6 +339,11 @@ function bindEvents() {
   document.addEventListener("click", handleActionClick);
 }
 
+function getSavedPreference(key, fallback) {
+  if (localStorage.getItem(PREF_VERSION_KEY) !== PREF_VERSION) return fallback;
+  return localStorage.getItem(key) || fallback;
+}
+
 function setTheme(theme) {
   appTheme = theme === "dark" ? "dark" : "light";
   localStorage.setItem(THEME_KEY, appTheme);
@@ -354,17 +361,16 @@ function setLanguage(language) {
 function applyPreferences() {
   if (!["light", "dark"].includes(appTheme)) appTheme = "light";
   if (!["en", "vi"].includes(appLanguage)) appLanguage = "en";
+  localStorage.setItem(PREF_VERSION_KEY, PREF_VERSION);
+  localStorage.setItem(THEME_KEY, appTheme);
+  localStorage.setItem(LANGUAGE_KEY, appLanguage);
   applyTheme();
   applyStaticTranslations();
 }
 
 function applyTheme() {
   document.documentElement.dataset.theme = appTheme;
-  themeButtons.forEach((button) => {
-    const active = button.dataset.themeValue === appTheme;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
+  themeSelect.value = appTheme;
 }
 
 function applyStaticTranslations() {
@@ -383,11 +389,7 @@ function applyStaticTranslations() {
     element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
   });
 
-  languageButtons.forEach((button) => {
-    const active = button.dataset.languageValue === appLanguage;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
+  languageSelect.value = appLanguage;
 }
 
 function updateMedicineFormText() {

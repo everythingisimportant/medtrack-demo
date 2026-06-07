@@ -23,10 +23,10 @@
   --ink: #f0f5ef;
   --muted: #a8b3ac;
   --line: #36413a;
-  --field: #151a17;
-  --soft: #22352d;
+  --field: #101612;
+  --soft: #263c32;
   --soft-strong: #294738;
-  --card: #151a17;
+  --card: #222a25;
   --progress-bg: #303a34;
   --accent: #4fc08d;
   --accent-2: #e6b84b;
@@ -47,6 +47,7 @@ body {
 }
 
 button,
+select,
 input,
 textarea {
   font: inherit;
@@ -111,33 +112,47 @@ button:disabled {
   margin-bottom: 22px;
 }
 
-.switch-group {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.12);
+.control-select {
+  display: grid;
+  gap: 5px;
+  min-width: 132px;
 }
 
-.switch-button {
-  min-height: 34px;
-  border-radius: 6px;
-  padding: 0 11px;
-  color: rgba(255, 255, 255, 0.78);
-  background: transparent;
-  font-size: 0.82rem;
+.control-select label {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.control-select select {
+  min-height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 8px;
+  padding: 0 34px 0 12px;
+  color: #123328;
+  background-color: rgba(255, 255, 255, 0.94);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 16px) 16px,
+    calc(100% - 11px) 16px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  font-size: 0.84rem;
   font-weight: 900;
 }
 
-.switch-button.active {
-  color: #123328;
-  background: #ffffff;
-}
-
-:root[data-theme="dark"] .switch-button.active {
-  color: #0f1512;
-  background: var(--accent-2);
+.control-select select:focus {
+  outline: 0;
+  border-color: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 0 0 3px rgba(228, 165, 45, 0.26);
 }
 
 .overview-cards {
@@ -319,6 +334,7 @@ label {
 }
 
 input,
+select,
 textarea {
   width: 100%;
   max-width: 100%;
@@ -332,7 +348,25 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: color-mix(in srgb, var(--muted) 72%, transparent);
+  color: color-mix(in srgb, var(--muted) 84%, transparent);
+}
+
+.control-select select {
+  color: #123328;
+  background-color: rgba(255, 255, 255, 0.94);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 16px) 16px,
+    calc(100% - 11px) 16px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+:root[data-theme="dark"] .control-select select {
+  color: #0f1512;
+  background-color: var(--accent-2);
 }
 
 input:focus,
@@ -382,6 +416,7 @@ textarea:focus {
   padding: 22px;
   border: 1px dashed var(--line);
   border-radius: 8px;
+  background: var(--card);
   color: var(--muted);
   text-align: center;
 }
