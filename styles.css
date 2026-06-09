@@ -368,6 +368,10 @@ button:disabled {
   color: var(--muted);
 }
 
+.auth-panel + .panel {
+  margin-top: 20px;
+}
+
 .auth-form {
   display: grid;
   grid-template-columns: 1fr 1fr auto auto auto;
