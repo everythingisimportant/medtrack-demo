@@ -4,7 +4,7 @@ const PUBLIC_APP_URL = "https://everythingisimportant.github.io/medtrack-demo/";
 const THEME_KEY = "medtrack-theme";
 const LANGUAGE_KEY = "medtrack-language";
 const PREF_VERSION_KEY = "medtrack-pref-version";
-const PREF_VERSION = "flag-language-muted-taken-20260607";
+const PREF_VERSION = "dose-progress-flags-20260609";
 
 const translations = {
   en: {
@@ -70,7 +70,7 @@ const translations = {
     dosesConfirmed: "{done}/{total} doses confirmed.",
     dayOfTreatment: "Day {elapsed} of {total}. {left} days left.",
     activeTreatment: "{elapsed}/{total} treatment days, {percent}% complete",
-    totalConfirmedDoses: "{count} total confirmed doses",
+    medicineDoseProgress: "{taken}/{total} doses taken, {percent}% complete",
     medicineMeta: "{dose} - {times} - starts {start} - {days} days",
     noMedicationScheduled: "No medication scheduled yet.",
     noMedicationAdded: "No medication added yet.",
@@ -167,7 +167,7 @@ const translations = {
     dosesConfirmed: "Đã xác nhận {done}/{total} liều.",
     dayOfTreatment: "Ngày {elapsed} trên {total}. Còn {left} ngày.",
     activeTreatment: "{elapsed}/{total} ngày điều trị, hoàn thành {percent}%",
-    totalConfirmedDoses: "Tổng {count} liều đã xác nhận",
+    medicineDoseProgress: "Đã uống {taken}/{total} liều, hoàn thành {percent}%",
     medicineMeta: "{dose} - {times} - bắt đầu {start} - {days} ngày",
     noMedicationScheduled: "Chưa có thuốc trong lịch.",
     noMedicationAdded: "Chưa thêm thuốc.",
@@ -748,14 +748,13 @@ function renderMedicines() {
   medicineList.innerHTML = medicines.length
     ? medicines
         .map((medicine) => {
-          const progress = getTreatmentProgress(medicine);
+          const progress = getMedicineDoseProgress(medicine);
           return `
             <article class="medicine-card">
               <div>
                 <p class="medicine-title">${escapeHtml(medicine.name)}</p>
                 <p class="medicine-meta">${escapeHtml(formatMessage("medicineMeta", { dose: medicine.dose, times: medicine.times.join(", "), start: formatEnglishDate(getMedicineStartKey(medicine)), days: medicine.days }))}</p>
-                <p class="medicine-meta">${escapeHtml(formatMessage("activeTreatment", { elapsed: progress.elapsed, total: medicine.days, percent: progress.percent }))}</p>
-                <p class="medicine-meta">${escapeHtml(formatMessage("totalConfirmedDoses", { count: getTakenCount(medicine.id) }))}</p>
+                <p class="medicine-meta">${escapeHtml(formatMessage("medicineDoseProgress", { taken: progress.taken, total: progress.total, percent: progress.percent }))}</p>
                 <div class="medicine-progress" aria-label="Treatment progress">
                   <span style="width: ${progress.percent}%"></span>
                 </div>
@@ -804,11 +803,14 @@ function parseTimes(value) {
     .sort();
 }
 
-function getTreatmentProgress(medicine) {
-  const start = getMedicineStartDate(medicine);
-  const now = startOfDay(new Date());
-  const elapsed = Math.min(medicine.days, Math.max(1, Math.floor((now - start) / 86400000) + 1));
-  return { elapsed, percent: Math.round((elapsed / medicine.days) * 100) };
+function getMedicineDoseProgress(medicine) {
+  const total = getTotalDoseCount(medicine);
+  const taken = Math.min(total, getTakenCount(medicine.id));
+  return {
+    taken,
+    total,
+    percent: Math.round((taken / total) * 100)
+  };
 }
 
 function getOverallTreatmentProgress() {
@@ -835,6 +837,12 @@ function getOverallTreatmentProgress() {
 
 function getTakenCount(medicineId) {
   return doseLogs.filter((log) => log.medicine_id === medicineId).length;
+}
+
+function getTotalDoseCount(medicine) {
+  const days = Math.max(1, Number(medicine.days) || 1);
+  const dailyDoses = Math.max(1, Array.isArray(medicine.times) ? medicine.times.length : 0);
+  return days * dailyDoses;
 }
 
 function getMedicineStartDate(medicine) {

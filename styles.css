@@ -132,13 +132,15 @@ button:disabled {
 
 .icon-select {
   background: rgba(255, 255, 255, 0.94);
+  width: 52px;
 }
 
 .icon-select::after {
   content: "";
   position: absolute;
   right: 6px;
-  bottom: 7px;
+  top: 50%;
+  transform: translateY(-50%);
   border-top: 4px solid currentColor;
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
@@ -183,6 +185,14 @@ button:disabled {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14);
 }
 
+.icon-select .flag-icon {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
 .flag-en {
   background:
     linear-gradient(#b22234 0 7.7%, #fff 7.7% 15.4%, #b22234 15.4% 23.1%, #fff 23.1% 30.8%, #b22234 30.8% 38.5%, #fff 38.5% 46.2%, #b22234 46.2% 53.9%, #fff 53.9% 61.6%, #b22234 61.6% 69.3%, #fff 69.3% 77%, #b22234 77% 84.7%, #fff 84.7% 92.4%, #b22234 92.4% 100%);
@@ -208,7 +218,7 @@ button:disabled {
 }
 
 .flag-vi::before {
-  content: "★";
+  content: "\2605";
 }
 
 .icon-control:focus,
