@@ -4,7 +4,7 @@ const PUBLIC_APP_URL = "https://everythingisimportant.github.io/medtrack-demo/";
 const THEME_KEY = "medtrack-theme";
 const LANGUAGE_KEY = "medtrack-language";
 const PREF_VERSION_KEY = "medtrack-pref-version";
-const PREF_VERSION = "dose-progress-flags-20260609";
+const PREF_VERSION = "css-flag-language-menu-20260609";
 
 const translations = {
   en: {
@@ -258,8 +258,11 @@ const medicineNote = document.querySelector("#medicineNote");
 const storageMode = document.querySelector("#storageMode");
 const themeToggle = document.querySelector("#themeToggle");
 const themeIcon = document.querySelector("#themeIcon");
+const languageMenu = document.querySelector("#languageMenu");
+const languageMenuButton = document.querySelector("#languageMenuButton");
+const languageMenuList = document.querySelector("#languageMenuList");
 const languageFlag = document.querySelector("#languageFlag");
-const languageSelect = document.querySelector("#languageSelect");
+const languageOptions = document.querySelectorAll("[data-language]");
 
 init();
 
@@ -290,7 +293,13 @@ function bindEvents() {
   requestAccess.addEventListener("click", createAccessRequest);
   cancelEditButton.addEventListener("click", resetMedicineForm);
   themeToggle.addEventListener("click", () => setTheme(appTheme === "dark" ? "light" : "dark"));
-  languageSelect.addEventListener("change", () => setLanguage(languageSelect.value));
+  languageMenuButton.addEventListener("click", toggleLanguageMenu);
+  languageOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+      setLanguage(option.dataset.language);
+      closeLanguageMenu();
+    });
+  });
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -343,6 +352,8 @@ function bindEvents() {
   });
 
   document.addEventListener("click", handleActionClick);
+  document.addEventListener("click", handleOutsideLanguageMenu);
+  document.addEventListener("keydown", handleDocumentKeydown);
 }
 
 function getSavedPreference(key, fallback) {
@@ -397,9 +408,39 @@ function applyStaticTranslations() {
     element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
   });
 
-  languageSelect.value = appLanguage;
   languageFlag.className = `flag-icon ${appLanguage === "vi" ? "flag-vi" : "flag-en"}`;
-  languageSelect.setAttribute("aria-label", t("languageLabel"));
+  languageMenuButton.setAttribute("aria-label", t("languageLabel"));
+  languageOptions.forEach((option) => {
+    option.setAttribute("aria-checked", String(option.dataset.language === appLanguage));
+  });
+}
+
+function toggleLanguageMenu() {
+  if (languageMenuList.hidden) {
+    openLanguageMenu();
+  } else {
+    closeLanguageMenu();
+  }
+}
+
+function openLanguageMenu() {
+  languageMenuList.hidden = false;
+  languageMenuButton.setAttribute("aria-expanded", "true");
+}
+
+function closeLanguageMenu() {
+  languageMenuList.hidden = true;
+  languageMenuButton.setAttribute("aria-expanded", "false");
+}
+
+function handleOutsideLanguageMenu(event) {
+  if (languageMenu.contains(event.target)) return;
+  closeLanguageMenu();
+}
+
+function handleDocumentKeydown(event) {
+  if (event.key !== "Escape") return;
+  closeLanguageMenu();
 }
 
 function getThemeIcon(theme) {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedTrack Demo</title>
-    <link rel="stylesheet" href="./styles.css?v=dose-progress-flags-20260609" />
+    <link rel="stylesheet" href="./styles.css?v=css-flag-language-menu-20260609" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
@@ -15,12 +15,18 @@
             <button id="themeToggle" class="icon-control" type="button" aria-label="Switch to dark mode">
               <span id="themeIcon" aria-hidden="true"></span>
             </button>
-            <div class="icon-select">
-              <span id="languageFlag" class="flag-icon flag-en" aria-hidden="true"></span>
-              <select id="languageSelect" aria-label="Language">
-                <option value="en" aria-label="English">&#x1F1EC;&#x1F1E7;</option>
-                <option value="vi" aria-label="Vietnamese">&#x1F1FB;&#x1F1F3;</option>
-              </select>
+            <div id="languageMenu" class="icon-select">
+              <button id="languageMenuButton" class="language-menu-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Language">
+                <span id="languageFlag" class="flag-icon flag-en" aria-hidden="true"></span>
+              </button>
+              <div id="languageMenuList" class="language-menu-list" role="menu" hidden>
+                <button class="language-menu-option" type="button" role="menuitemradio" aria-checked="true" data-language="en" aria-label="English">
+                  <span class="flag-icon flag-en" aria-hidden="true"></span>
+                </button>
+                <button class="language-menu-option" type="button" role="menuitemradio" aria-checked="false" data-language="vi" aria-label="Vietnamese">
+                  <span class="flag-icon flag-vi" aria-hidden="true"></span>
+                </button>
+              </div>
             </div>
           </div>
           <p class="eyebrow" data-i18n="heroEyebrow">Treatment tracker</p>
@@ -191,6 +197,6 @@
       </footer>
     </main>
 
-    <script src="./app.js?v=dose-progress-flags-20260609"></script>
+    <script src="./app.js?v=css-flag-language-menu-20260609"></script>
   </body>
 </html>
